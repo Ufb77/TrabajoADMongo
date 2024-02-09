@@ -10,6 +10,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import controller.Main;
+
 public class CrearGeneral extends JFrame implements ActionListener, FocusListener{
 
 	private static final long serialVersionUID = 1L;
@@ -31,29 +33,34 @@ public class CrearGeneral extends JFrame implements ActionListener, FocusListene
 		textNombre.setText("Nombre");
 		textNombre.setBounds(54, 63, 188, 60);
 		getContentPane().add(textNombre);
+		textNombre.addFocusListener(this);
 		
 		textFabricante = new JTextField();
 		textFabricante.setText("Fabricante");
 		textFabricante.setBounds(54, 215, 188, 60);
 		getContentPane().add(textFabricante);
+		textFabricante.addFocusListener(this);
 		
 		textFamilia = new JTextField();
 		textFamilia.setText("Familia");
 		textFamilia.setBounds(394, 63, 188, 60);
 		getContentPane().add(textFamilia);
+		textFamilia.addFocusListener(this);
 		
 		textPrecio = new JTextField();
 		textPrecio.setText("Precio");
 		textPrecio.setBounds(394, 215, 188, 60);
 		getContentPane().add(textPrecio);
+		textPrecio.addFocusListener(this);
 		
 		btnSiguiente = new JButton("->");
 		btnSiguiente.setBounds(535, 335, 89, 23);
 		getContentPane().add(btnSiguiente);
-		
+		btnSiguiente.addActionListener(this);
 		btnCancelar = new JButton("Cancelar");
 		btnCancelar.setBounds(403, 335, 89, 23);
 		getContentPane().add(btnCancelar);
+		btnCancelar.addActionListener(this);
 
 	}
 
@@ -67,11 +74,29 @@ public class CrearGeneral extends JFrame implements ActionListener, FocusListene
 	public void focusLost(FocusEvent e) {
 		// TODO Auto-generated method stub
 		
+		if(textNombre == e.getSource()) {
+			System.out.println(textNombre.getText());
+			Main.obtenerNombre(textNombre.getText());
+		}else if(textFamilia == e.getSource()) {
+			System.out.println(textFamilia.getText());
+			Main.obtenerFamilia(textFamilia.getText());
+		}else if(textPrecio == e.getSource()) {
+			System.out.println(textPrecio.getText());
+			Main.obtenerPrecio(textPrecio.getText());
+		}else if(textFabricante == e.getSource()) {
+			System.out.println(textFabricante.getText());
+			Main.obtenerFabricante(textFabricante.getText());
+		}
+		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+	
+		if(btnSiguiente == e.getSource()) {
+			Main.addDocument();
+		}
 		
 	}
 }

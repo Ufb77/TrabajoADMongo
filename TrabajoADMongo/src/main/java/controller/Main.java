@@ -16,12 +16,13 @@ import bd.AccesoBdInstrumentos;
 import connection.MongoDB;
 import librerias.IO;
 import view.CrearGeneral;
+import view.General;
 import view.Vista_Instrumentos;
 
 public class Main {
 
 	// Para mostrar
-	public static String nombre, familia, fabricante, AccesorioInstrumental, material, tonalidad;
+	public static String nombre, familia, fabricante, AccesorioInstrumental, material, tonalidad, formato, conexion;
 	public static Integer productionYear, numCuerdas, numTeclas, numTambores, numPedales;
 	public static Double precio, rating;
 
@@ -30,6 +31,7 @@ public class Main {
 	static int opcion = 0;
 
 	static Document documentoBD = new Document(); // Documento a escribir
+	static Document salidaBD = new Document();
 
 	/**
 	 * Imprime de forma legible el json
@@ -47,9 +49,7 @@ public class Main {
 		
 //		menuPpal(bd);
 
-		CrearGeneral vcg = new CrearGeneral();
-		
-		vcg.setVisible(true);
+		new General().setVisible(true);
 		
 		
 	}
@@ -104,7 +104,7 @@ public class Main {
 		Main.numPedales = Integer.parseInt(pedales);
 	}
 
-	public static void obtenerTambores(String tambores) {
+	public static void obtenerNumTambores(String tambores) {
 
 		Main.numTambores = Integer.parseInt(tambores);
 	}
@@ -119,6 +119,16 @@ public class Main {
 		Main.rating = Double.parseDouble(clasificacion);
 	}
 	
+	public static void obtenerFormato(String formato) {
+
+		Main.formato = formato;
+	}
+	
+	public static void obtenerConexion(String conexion) {
+
+		Main.conexion = conexion;
+	}
+	
 	public static void addDocument() {
 		
 		
@@ -131,14 +141,68 @@ public class Main {
 				
 				
 				
+				toDocument();
 				
 				
-				documentoBD.put("Nombre: ", Main.nombre);
-				documentoBD.put("Familia: ", Main.familia);
-				documentoBD.put("Fabricante: ", Main.fabricante);
-				documentoBD.put("Precio: ", Main.precio);
 				bd.addInstrumento(documentoBD);
 				documentoBD.clear();
+				salidaBD.clear();
+	}
+	
+	private static void toDocument() {
+	
+		documentoBD.put("Nombre: ", Main.nombre);
+		documentoBD.put("Familia: ", Main.familia);
+		documentoBD.put("Fabricante: ", Main.fabricante);
+		documentoBD.put("Precio: ", Main.precio);
+		
+		if(tonalidad != null) {
+			documentoBD.put("Tonalidad: ", Main.tonalidad);
+		}
+		
+		if(numCuerdas != null) {
+			documentoBD.put("Número de cuerdas: ", Main.numCuerdas);
+		}
+		
+		if(numTambores != null) {
+			documentoBD.put("Número de tambores: ", Main.numTambores);
+		}
+		
+		if(numTeclas != null) {
+			documentoBD.put("Número de teclas: ", Main.numTeclas);
+		}
+		
+		if(numPedales != null) {
+			documentoBD.put("Número de pedales: ", Main.numPedales);
+		}
+		
+		if(material != null) {
+			documentoBD.put("Material: ", Main.material);
+		}
+		
+		if(rating != null) {
+			documentoBD.put("Clasificación: ", Main.rating);
+		}
+		
+		if(AccesorioInstrumental != null) {
+			documentoBD.put("Accesorio para tocar: ", Main.AccesorioInstrumental);
+		}
+		
+		if(formato != null && conexion != null) {
+			salidaBD.put("Formato: ", Main.formato);
+			salidaBD.put("Conexion: ", Main.conexion);
+			documentoBD.put("Salida: ", salidaBD);
+			
+			
+		}else if(formato == null ) {
+			salidaBD.put("Conexion: ", Main.conexion);
+			documentoBD.put("Salida: ", salidaBD);
+		}else if(conexion == null) {
+			salidaBD.put("Formato: ", Main.formato);
+			documentoBD.put("Salida: ", salidaBD);
+		}
+		
+		
 	}
 
 //	/**

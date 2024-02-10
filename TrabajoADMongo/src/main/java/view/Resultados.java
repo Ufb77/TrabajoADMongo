@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class Resultados extends JFrame implements ActionListener, FocusListener{
+public class Resultados extends JFrame implements ActionListener, FocusListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -18,49 +18,70 @@ public class Resultados extends JFrame implements ActionListener, FocusListener{
 	JTextField resultados;
 	private JButton btnSiguiente;
 	private JButton btnCancelar;
+	private int operacion;
 
 	/**
 	 * Create the frame.
 	 */
-	public Resultados() {
+	public Resultados(int operacion) {
 		setBounds(100, 100, 663, 408);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
-		
+		this.operacion = operacion;
+
 		resultados = new JTextField();
 		resultados.setText("Aquí van los resultados");
 		resultados.setBounds(34, 27, 577, 286);
 		getContentPane().add(resultados);
-		
-		
-		
-		
+
 		btnSiguiente = new JButton("Ok");
 		btnSiguiente.setBounds(535, 335, 89, 23);
 		getContentPane().add(btnSiguiente);
-		
+		btnSiguiente.addActionListener(this);
+
 		btnCancelar = new JButton("<-");
 		btnCancelar.setBounds(403, 335, 89, 23);
 		getContentPane().add(btnCancelar);
+		btnCancelar.addActionListener(this);
 
 	}
 
 	@Override
 	public void focusGained(FocusEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void focusLost(FocusEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
+		if (btnSiguiente == e.getSource()) {
+
+			if (operacion == General.BUSCAR) {
+				new General().setVisible(true);
+				;
+				dispose();
+			} else if (operacion == General.MODIFICAR) {
+				new ModificarYEliminar(operacion).setVisible(true);
+				dispose();
+				
+			} else if (operacion == General.ELIMINAR) {
+				new ModificarYEliminar(operacion).setVisible(true);
+				dispose();
+			}
+
+		} else if (btnCancelar == e.getSource()) {
+			new Buscar(operacion).setVisible(true); 
+															
+			dispose();
+
+		}
 	}
 
 }

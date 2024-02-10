@@ -95,7 +95,13 @@ public class CrearGeneral extends JFrame implements ActionListener, FocusListene
 		// TODO Auto-generated method stub
 	
 		if(btnSiguiente == e.getSource()) {
-			Main.addDocument();
+//			Main.addDocument();
+			
+			new CrearEspecifico().setVisible(true);
+			dispose();
+		}else if(btnCancelar == e.getSource()) {
+			new General().setVisible(true);
+			dispose();
 		}
 		
 	}

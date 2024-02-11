@@ -10,6 +10,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.bson.Document;
+
+import com.mongodb.client.MongoCursor;
+
 public class Resultados extends JFrame implements ActionListener, FocusListener {
 
 	private static final long serialVersionUID = 1L;
@@ -19,18 +23,20 @@ public class Resultados extends JFrame implements ActionListener, FocusListener 
 	private JButton btnSiguiente;
 	private JButton btnCancelar;
 	private int operacion;
+	private String texto;
+	
 
 	/**
 	 * Create the frame.
 	 */
-	public Resultados(int operacion) {
+	public Resultados(int operacion, String texto) {
 		setBounds(100, 100, 663, 408);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		this.operacion = operacion;
-
+		this.texto = texto;
 		resultados = new JTextField();
-		resultados.setText("Aquí van los resultados");
+		resultados.setText(this.texto);
 		resultados.setBounds(34, 27, 577, 286);
 		getContentPane().add(resultados);
 
@@ -68,11 +74,11 @@ public class Resultados extends JFrame implements ActionListener, FocusListener 
 				;
 				dispose();
 			} else if (operacion == General.MODIFICAR) {
-				new ModificarYEliminar(operacion).setVisible(true);
+				new ModificarYEliminar(operacion, texto).setVisible(true);
 				dispose();
 				
 			} else if (operacion == General.ELIMINAR) {
-				new ModificarYEliminar(operacion).setVisible(true);
+				new ModificarYEliminar(operacion, texto).setVisible(true);
 				dispose();
 			}
 

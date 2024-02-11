@@ -118,8 +118,8 @@ public class Vista_Instrumentos {
 	 * Imprime las opciones a la hora de escribir el elemento necesario para tocar
 	 */
 	public void escribirElementoTocar() {
-		if(Main.AccesorioInstrumental != null) {
-			IO.println("El elemento necesario para tocar el instrumento actual es: " + Main.AccesorioInstrumental + "Introduzca uno nuevo para cambiarlo o -1 para volver al menú anterior");
+		if(Main.accesorioInstrumental != null) {
+			IO.println("El elemento necesario para tocar el instrumento actual es: " + Main.accesorioInstrumental + "Introduzca uno nuevo para cambiarlo o -1 para volver al menú anterior");
 		}else {
 			IO.println("Introduzca el elemento necesario para tocar");
 		}

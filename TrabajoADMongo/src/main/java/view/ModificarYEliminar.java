@@ -19,15 +19,17 @@ public class ModificarYEliminar extends JFrame implements ActionListener, FocusL
 	private JButton btnSiguiente;
 	private JButton btnCancelar;
 	private int operacion;
+	private String texto;
 
 	/**
 	 * Create the frame.
 	 */
-	public ModificarYEliminar(int operacion) {
+	public ModificarYEliminar(int operacion, String texto) {
 		setBounds(100, 100, 663, 408);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		this.operacion = operacion;
+		this.texto = texto;
 		
 		clave = new JTextField();
 		clave.setText("Nueva Clave/Clave Eliminar");
@@ -80,7 +82,7 @@ public class ModificarYEliminar extends JFrame implements ActionListener, FocusL
 			
 			
 		}else if(btnCancelar == e.getSource()) {
-			new Resultados(operacion).setVisible(true);
+			new Resultados(operacion, texto).setVisible(true);
 			dispose();
 		}
 		

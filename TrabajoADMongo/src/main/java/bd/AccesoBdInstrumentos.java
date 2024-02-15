@@ -60,6 +60,11 @@ public class AccesoBdInstrumentos {
 				
 	}
 	
+	//AQUI ESTA EL UPDATE
+	public void modificar(String clave, Object valor, Document updateDocument) {
+		coleccion.updateOne(Filters.eq(clave, valor), updateDocument);
+	}
+	
 	/**
 	 * Elimina un registro
 	 * @param campo

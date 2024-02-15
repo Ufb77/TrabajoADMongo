@@ -79,29 +79,25 @@ public class VtnModificarYEliminar extends JFrame implements ActionListener, Foc
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
-		if(btnSiguiente == e.getSource()) {
-			if(operacion == VtnPrincipal.MODIFICAR) {
-				
-				String claveBuscar = (String) claves.getSelectedItem();
-				Object nuevoValor = valor.getText();
-				
-				Main.modificarDocumento(claveBuscar, texto, nuevoValor);
-				
-				
-				//OPERACION MOD BD
+
+		if (btnSiguiente == e.getSource()) {
+			if (operacion == VtnPrincipal.MODIFICAR) {
+				//HE SIMPLICADO ESTO PORQUE TODAS LAS CLASES HEREDAN DE OBJECT ASI QUE METE DIRECTAMENTE EL VALOR SIN NECESIDAD DE 
+				//CREAR VARIABLES
+				Main.modificarDocumento(claves.getSelectedItem().toString(), texto, valor.getText());
+
+				// OPERACION MOD BD
 				new VtnPrincipal().setVisible(true);
-			}else if(operacion == VtnPrincipal.ELIMINAR) {
+			} else if (operacion == VtnPrincipal.ELIMINAR) {
 				new VtnPrincipal().setVisible(true);
 			}
 			dispose();
-			
-			
-		}else if(btnCancelar == e.getSource()) {
+
+		} else if (btnCancelar == e.getSource()) {
 			new VtnResultado(operacion, texto).setVisible(true);
 			dispose();
 		}
-		
+
 	}
 
 }

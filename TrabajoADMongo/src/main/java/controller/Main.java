@@ -182,6 +182,27 @@ public class Main {
 	    }
 	}
 	
+	public static void modificarDocumento(String clave, Object valorActual, Object valorNuevo) {
+		Document docActualizar = accessDB.leerUnoInstrumento(clave, valorActual);
+		//VAS A LA VTN BUSCAR AL METODO QUE ABRE ABRE LA VENTANA A PARTIR DEL IF DE MODIFICAR
+		System.out.println("Entrando en el método...");
+		System.out.println(valorNuevo);
+		if(docActualizar != null) {  // Cambiado de == a !=
+			System.out.println("Se comprueba que no está vacío");
+			
+			Document updateDocument = new Document("$set", new Document(clave, valorNuevo));  // Usar $set para actualizar
+			
+			System.out.println("Se crea el nuevo documento");
+			
+			//ESTA ACCION QUE PUSISTE ES COSA DEL DAO Y LO QUE HE HECHO HA SIDO PASARLA AL DAO NADA MAS :))
+			accessDB.modificar(clave, valorNuevo, updateDocument);
+			
+			System.out.println("Actualizado");
+		} else {
+			System.err.println("Error, documento no encontrado para actualización.");
+		}
+	}
+	
 	/**
 	 * Manda al dao los datos a escribir y limpia todo tras hacerlo.
 	 */
@@ -278,26 +299,6 @@ public class Main {
 		for (Object object : lista) {
 			object = null;
 		}
-	}
-	public static void modificarDocumento(String clave, Object valorActual, Object valorNuevo) {
-		System.out.println("UwU");
-		Document docActualizar = accessDB.leerUnoInstrumento(clave, valorActual);
-		System.out.println("Entrando en el método...");
-		System.out.println(valorNuevo);
-		if(docActualizar == null) {
-			System.out.println("Se comprueba que no está vacío");
-			
-			Document updateDocument = new Document(clave, valorNuevo);
-			
-			System.out.println("Se crea el nuevo documento");
-			
-			collection.updateOne(docActualizar, updateDocument);
-			
-			System.out.println("Actualizado");
-		} else {
-			System.err.println("AUTISTADA, AUTISTADA, AUTISTADA, AUTISTADA, ");
-		}
-		
 	}
 }
 

@@ -1,21 +1,27 @@
 package view;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import controller.Main;
 
 public class VtnModificarYEliminar extends JFrame implements ActionListener, FocusListener{
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 
-	JTextField clave, valor;
+	JTextField  valor;
+	JComboBox<String> claves;
 	private JButton btnSiguiente;
 	private JButton btnCancelar;
 	private int operacion;
@@ -31,11 +37,13 @@ public class VtnModificarYEliminar extends JFrame implements ActionListener, Foc
 		this.operacion = operacion;
 		this.texto = texto;
 		
-		clave = new JTextField();
-		clave.setText("Nueva Clave/Clave Eliminar");
-		clave.setBounds(201, 60, 188, 60);
-		getContentPane().add(clave);
-		clave.addFocusListener(this);
+		claves = new JComboBox();
+		claves.setFont(new Font("Verdana", Font.BOLD, 15));
+		claves.setModel(new DefaultComboBoxModel(new String[] { "Nombre", "Familia", "Fabricante", "Precio",
+				"Tonalidad", "Número de cuerdas", "Número de tambores", "Número de teclas", "Número de pedales",
+				"Material", "Clasificación", "Accesorio para tocar" }));
+		claves.setBounds(201, 77, 218, 50);
+		getContentPane().add(claves);
 		
 		valor = new JTextField();
 		valor.setText("Nuevo Valor / Valor Eliminar");
@@ -74,11 +82,19 @@ public class VtnModificarYEliminar extends JFrame implements ActionListener, Foc
 		
 		if(btnSiguiente == e.getSource()) {
 			if(operacion == VtnPrincipal.MODIFICAR) {
+				
+				String claveBuscar = (String) claves.getSelectedItem();
+				Object nuevoValor = valor.getText();
+				
+				Main.modificarDocumento(claveBuscar, texto, nuevoValor);
+				
+				
 				//OPERACION MOD BD
 				new VtnPrincipal().setVisible(true);
 			}else if(operacion == VtnPrincipal.ELIMINAR) {
 				new VtnPrincipal().setVisible(true);
 			}
+			dispose();
 			
 			
 		}else if(btnCancelar == e.getSource()) {

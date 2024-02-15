@@ -137,7 +137,7 @@ public class VtnBuscar extends JFrame implements ActionListener, FocusListener {
 		String texto;
 		if (btnSiguiente == e.getSource()) {
 
-			texto = Main.obtenerConsulta(claves.getSelectedItem().toString(), Main.obtenerPrecio(valor.getText())); 
+			texto = Main.obtenerConsulta(claves.getSelectedItem().toString(), valor.getText()); 
 			
 			System.out.println(claves.getSelectedItem() + " " + valor.getText());
 			
@@ -148,7 +148,8 @@ public class VtnBuscar extends JFrame implements ActionListener, FocusListener {
 				new VtnResultado(VtnPrincipal.MODIFICAR, texto).setVisible(true);
 				dispose();
 			} else if (operacion == VtnPrincipal.ELIMINAR) {
-				texto = Main.deleteInstrument(claves.getSelectedItem().toString(), valor.getText());
+				//Esta llamando al metodo eliminar muchos
+				texto = Main.deleteManyInstruments(claves.getSelectedItem().toString(), valor.getText());
 				//PARA LA CONSULTA DE ELIMINAR TODOS LOS DOCUMENTOS QUE CUMPLAN LA CONDICION CAMPOX == VALOR
 				//IDEA -> PONER UN CHECKBOX QUE SI SE MARCA SE EJECUTA EL METODO ELIMINAR VARIOS QUE HAY EN EL MAIN
 				

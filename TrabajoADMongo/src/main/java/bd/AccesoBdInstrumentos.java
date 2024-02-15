@@ -40,7 +40,26 @@ public class AccesoBdInstrumentos {
 		MongoCursor<Document> cursor = coleccion.find(eq(campo, valor)).iterator();
 		return cursor;
 	}
-
+	
+	/**
+	 * Transforma la clave y el valor en una consulta que devuelve un solo Objeto
+	 * @param clave
+	 * @param valor
+	 * @return
+	 */
+	public Document leerUnoInstrumento(String clave, Object valor) {
+		// Quitamos la Id para que sea más cómodo de leer
+		
+		Document doc = coleccion.find(eq(clave, valor))
+				.first();
+		
+		if(doc == null) {
+			System.err.println("Error, no se ha encontrado" + valor.toString() + doc);
+		}
+		return doc;
+				
+	}
+	
 	/**
 	 * Elimina un registro
 	 * @param campo

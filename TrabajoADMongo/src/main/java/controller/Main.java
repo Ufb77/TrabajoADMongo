@@ -153,7 +153,7 @@ public class Main {
 		    }
 		 
 		cursor.close();
-		return pretty(texto.toString());
+		return texto.toString();
 	}
 	
 	
@@ -278,6 +278,26 @@ public class Main {
 		for (Object object : lista) {
 			object = null;
 		}
+	}
+	public static void modificarDocumento(String clave, Object valorActual, Object valorNuevo) {
+		System.out.println("UwU");
+		Document docActualizar = accessDB.leerUnoInstrumento(clave, valorActual);
+		System.out.println("Entrando en el método...");
+		System.out.println(valorNuevo);
+		if(docActualizar == null) {
+			System.out.println("Se comprueba que no está vacío");
+			
+			Document updateDocument = new Document(clave, valorNuevo);
+			
+			System.out.println("Se crea el nuevo documento");
+			
+			collection.updateOne(docActualizar, updateDocument);
+			
+			System.out.println("Actualizado");
+		} else {
+			System.err.println("AUTISTADA, AUTISTADA, AUTISTADA, AUTISTADA, ");
+		}
+		
 	}
 }
 

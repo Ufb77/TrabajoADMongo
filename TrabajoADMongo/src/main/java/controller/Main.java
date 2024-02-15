@@ -1,31 +1,27 @@
 package controller;
 
-import org.bson.Document;
-import static com.mongodb.client.model.Filters.*;
-
 import java.util.ArrayList;
+
+import org.bson.Document;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.result.DeleteResult;
 
 import bd.AccesoBdInstrumentos;
 import connection.MongoDB;
-import librerias.IO;
-import view.CrearGeneral;
-import view.General;
-import view.Vista_Instrumentos;
+import view.VtnPrincipal;
 
 public class Main {
 
 	// Para mostrar
-	public static String nombre, familia, fabricante, accesorioInstrumental, material, tonalidad, formato, conexion;
+	public static String nombre, familia, fabricante, accesorioInstrumental, material, tonalidad, formato,  conexion;
 	public static Integer productionYear, numCuerdas, numTeclas, numTambores, numPedales;
 	public static Double precio, rating;
 
@@ -36,7 +32,7 @@ public class Main {
 	static MongoClient mongoClient = MongoDB.getClient();
 	static MongoDatabase database = mongoClient.getDatabase("EjMongo"); // NOMBRE DE LA BD
 	static MongoCollection<Document> collection = database.getCollection("Instrumentos"); // NOMBRE DE LA COLECCION
-	static AccesoBdInstrumentos bd = new AccesoBdInstrumentos(collection); // Instancia del acceso a datos
+	static AccesoBdInstrumentos accessDB = new AccesoBdInstrumentos(collection); // Instancia del acceso a datos
 
 //	static int opcion = 0;
 
@@ -59,7 +55,7 @@ public class Main {
 
 //		menuPpal(bd);
 
-		new General().setVisible(true);
+		new VtnPrincipal().setVisible(true);
 
 	}
 
@@ -118,9 +114,11 @@ public class Main {
 		Main.numTambores = Integer.parseInt(tambores);
 	}
 
-	public static void obtenerPrecio(String precio) {
+	public static Double obtenerPrecio(String precio) {
 
-		Main.precio = Double.parseDouble(precio);
+		Double precios = Double.parseDouble(precio);
+		return precios;
+		
 	}
 
 	public static void obtenerClasificacion(String clasificacion) {
@@ -144,39 +142,46 @@ public class Main {
 	 * @param valor
 	 * @return el texto a escribir en la ventana de resultados
 	 */
-	public static String obtenerConsulta(Object clave, String valor) {
-		
-		String claveBuscar = (String) clave;
+	//1 - ¿PASAR TODOS LOS DATOS A STRING?
+	public static String obtenerConsulta(String clave, Object valor) {
 		StringBuilder texto = new StringBuilder();
+		System.out.println(clave + ",CONTENIDO DENTRO DEL METODO " +valor);
+		MongoCursor<Document> cursor = accessDB.leerInstrumento(clave, valor);
 		
-		
-		MongoCursor<Document> cursor = bd.leerInstrumento(claveBuscar, valor);
-		
-		//Pasa la consulta a un stringbuilder
-		while(cursor.hasNext()) {
-			texto.append(pretty(cursor.next().toJson())); //Revisar por qué no escribe pretty :(
-		}
-		
-		
+		 while (cursor.hasNext()) {
+		        texto.append(pretty(cursor.next().toJson()));
+		    }
+		 
 		cursor.close();
-		
-		return texto.toString();
-		
-		
-//		if(!valor.matches("^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\\\\s]+$")) { //Contiene solo letras, espacios, acentos y ñ
-//			if(valor.contains(".")|| valor.contains(",")) {
-//				Double valorDecimal;
-//				valorDecimal = Double.valueOf(valor);
-//			}else if(valor.matches("^[0-9]+$")) {
-//				Integer valorNumerico;
-//				valorNumerico = Integer.valueOf(valor);
-//			}
-//		}else {
-//			
-//		}
-		
+		return pretty(texto.toString());
+	}
+	
+	
+	public static String deleteInstrument(String clave, Object valor) {
+		String resultado;
+	    DeleteResult result = accessDB.eliminarInstrumento(clave, valor);
+	    if (result.wasAcknowledged() && result.getDeletedCount() > 0) {
+	        resultado = "Instrumento borrado con exito";
+	    	return resultado;
+	    } else {
+	    	resultado =  "No se ha borrado ningun instrumento";
+	        return resultado;
+	    }
 	}
 
+
+	public static String deleteManyInstruments(String campo, Object valor) {
+		String resultado;
+	    DeleteResult result = accessDB.eliminarVariosInstrumentos(campo, valor);
+	    if (result.wasAcknowledged() && result.getDeletedCount() > 0) {
+	        resultado = "Los instrumentos que cumplian la condicion han sido eliminados";
+	    	return resultado;
+	    } else {
+	    	resultado =  "No se ha borrado ningun instrumento";
+	        return resultado;
+	    }
+	}
+	
 	/**
 	 * Manda al dao los datos a escribir y limpia todo tras hacerlo.
 	 */
@@ -184,7 +189,7 @@ public class Main {
 
 		toDocument();
 
-		bd.addInstrumento(documentoBD);
+		accessDB.addInstrumento(documentoBD);
 		limpiarCampos();
 		documentoBD.clear();
 		salidaBD.clear();
@@ -273,6 +278,21 @@ public class Main {
 		for (Object object : lista) {
 			object = null;
 		}
+	}
+}
+
+//		if(!valor.matches("^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\\\\s]+$")) { //Contiene solo letras, espacios, acentos y ñ
+//			if(valor.contains(".")|| valor.contains(",")) {
+//				Double valorDecimal;
+//				valorDecimal = Double.valueOf(valor);
+//			}else if(valor.matches("^[0-9]+$")) {
+//				Integer valorNumerico;
+//				valorNumerico = Integer.valueOf(valor);
+//			}
+//		}else {
+//			
+//		}
+
 
 		//Comprobar si funciona
 //		for (Object object : lista) {
@@ -281,7 +301,6 @@ public class Main {
 //			}
 //		}
 
-	}
 
 //	/**
 //	 * Opciones CRUD
@@ -405,4 +424,3 @@ public class Main {
 //
 //	}
 
-}

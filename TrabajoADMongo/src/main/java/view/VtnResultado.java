@@ -7,38 +7,32 @@ import java.awt.event.FocusListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import org.bson.Document;
-
-import com.mongodb.client.MongoCursor;
-
-public class Resultados extends JFrame implements ActionListener, FocusListener {
+public class VtnResultado extends JFrame implements ActionListener, FocusListener {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
 
 	JTextField resultados;
 	private JButton btnSiguiente;
 	private JButton btnCancelar;
 	private int operacion;
 	private String texto;
+	private JScrollPane scrollPane;
+	private JTextArea textArea;
 	
 
 	/**
 	 * Create the frame.
 	 */
-	public Resultados(int operacion, String texto) {
+	public VtnResultado(int operacion, String texto) {
 		setBounds(100, 100, 663, 408);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		this.operacion = operacion;
 		this.texto = texto;
-		resultados = new JTextField();
-		resultados.setText(this.texto);
-		resultados.setBounds(34, 27, 577, 286);
-		getContentPane().add(resultados);
 
 		btnSiguiente = new JButton("Ok");
 		btnSiguiente.setBounds(535, 335, 89, 23);
@@ -48,7 +42,16 @@ public class Resultados extends JFrame implements ActionListener, FocusListener 
 		btnCancelar = new JButton("<-");
 		btnCancelar.setBounds(403, 335, 89, 23);
 		getContentPane().add(btnCancelar);
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(25, 25, 599, 271);
+		getContentPane().add(scrollPane);
+		
+		textArea = new JTextArea();
+		textArea.setText(this.texto);
+		scrollPane.setViewportView(textArea);
 		btnCancelar.addActionListener(this);
+		
 
 	}
 
@@ -69,25 +72,21 @@ public class Resultados extends JFrame implements ActionListener, FocusListener 
 		// TODO Auto-generated method stub
 		if (btnSiguiente == e.getSource()) {
 
-			if (operacion == General.BUSCAR) {
-				new General().setVisible(true);
-				;
+			if (operacion == VtnPrincipal.BUSCAR) {
+				new VtnPrincipal().setVisible(true);
 				dispose();
-			} else if (operacion == General.MODIFICAR) {
-				new ModificarYEliminar(operacion, texto).setVisible(true);
+			} else if (operacion == VtnPrincipal.MODIFICAR) {
+				new VtnModificarYEliminar(operacion, texto).setVisible(true);
 				dispose();
-				
-			} else if (operacion == General.ELIMINAR) {
-				new ModificarYEliminar(operacion, texto).setVisible(true);
+			} else if (operacion == VtnPrincipal.ELIMINAR) {
+				new VtnPrincipal().setVisible(true);
 				dispose();
 			}
 
 		} else if (btnCancelar == e.getSource()) {
-			new Buscar(operacion).setVisible(true); 
-															
+			new VtnBuscar(operacion).setVisible(true); 									
 			dispose();
 
 		}
 	}
-
 }

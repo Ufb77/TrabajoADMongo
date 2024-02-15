@@ -12,7 +12,7 @@ import javax.swing.JTextField;
 
 import controller.Main;
 
-public class CrearGeneral extends JFrame implements ActionListener, FocusListener{
+public class VtnCrear1 extends JFrame implements ActionListener, FocusListener{
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -24,7 +24,7 @@ public class CrearGeneral extends JFrame implements ActionListener, FocusListene
 	/**
 	 * Create the frame.
 	 */
-	public CrearGeneral() {
+	public VtnCrear1() {
 		setBounds(100, 100, 663, 408);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
@@ -97,12 +97,30 @@ public class CrearGeneral extends JFrame implements ActionListener, FocusListene
 		if(btnSiguiente == e.getSource()) {
 //			Main.addDocument();
 			
-			new CrearEspecifico().setVisible(true);
+			new VtnCrear2().setVisible(true);
 			dispose();
 		}else if(btnCancelar == e.getSource()) {
-			new General().setVisible(true);
+			new VtnPrincipal().setVisible(true);
 			dispose();
 		}
 		
 	}
+	
+//	IDEA PLACEHOLDER A LA HORA DE CREAR Y BUSCAR
+//	@Override
+//	public void focusGained(FocusEvent e) {
+//		// TODO Auto-generated method stub
+//		if (campoDeTexto.getText().equals(PLACEHOLDER)) {
+//			campoDeTexto.setText("");
+//			campoDeTexto.setForeground(Color.BLACK);
+//		}
+//	}
+//
+//	@Override
+//	public void focusLost(FocusEvent e) {
+//		if (campoDeTexto.getText().isEmpty()) {
+//			campoDeTexto.setForeground(Color.BLACK);
+//			campoDeTexto.setText(PLACEHOLDER);
+//		}
+//	}
 }

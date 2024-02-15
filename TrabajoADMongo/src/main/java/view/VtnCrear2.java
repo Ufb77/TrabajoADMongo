@@ -11,12 +11,14 @@ import javax.swing.JTextField;
 
 import controller.Main;
 
-public class CrearEspecifico extends JFrame implements ActionListener, FocusListener{
+public class VtnCrear2 extends JFrame implements ActionListener, FocusListener{
 
 	private static final long serialVersionUID = 1L;
 
 	JTextField textTonalidad, textNumCuerdas, textNumTambores, textNumTeclastxtNPedales, txtMaterial, txtClasificacion, 
 	txtElementoParaTocar, txtFormato, txtConexion, textNumTeclas, textNumPedales;
+//	String tonalidad, numCuerdas, textNumTambores, textNumTeclastxtNPedales, txtMaterial, txtClasificacion, 
+//	txtElementoParaTocar, txtFormato, txtConexion, textNumTeclas, textNumPedales;
 	private JButton btnAdd;
 	private JButton btnAtras;
 	
@@ -24,7 +26,7 @@ public class CrearEspecifico extends JFrame implements ActionListener, FocusList
 	/**
 	 * Create the frame.
 	 */
-	public CrearEspecifico() {
+	public VtnCrear2() {
 		setBounds(100, 100, 663, 408);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
@@ -153,10 +155,10 @@ public class CrearEspecifico extends JFrame implements ActionListener, FocusList
 		// TODO Auto-generated method stub
 		if(btnAdd == e.getSource()) {
 			Main.addDocument();
-			new General().setVisible(true);
+			new VtnPrincipal().setVisible(true);
 			dispose();
 		}else if(btnAtras == e.getSource()) {
-			new CrearGeneral().setVisible(true);
+			new VtnCrear1().setVisible(true);
 			dispose();
 		}
 	}

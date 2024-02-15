@@ -1,15 +1,19 @@
 package bd;
 
+import static com.mongodb.client.model.Filters.eq;
+
 import org.bson.Document;
-import static com.mongodb.client.model.Filters.*;
-import com.mongodb.client.MongoClient;
+import org.bson.conversions.Bson;
+
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
-import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.result.DeleteResult;
 
 public class AccesoBdInstrumentos {
 
 	private MongoCollection<Document> coleccion;
+	
 
 	public AccesoBdInstrumentos(MongoCollection<Document> coleccion) {
 		this.coleccion = coleccion;
@@ -28,41 +32,30 @@ public class AccesoBdInstrumentos {
 	
 	/**
 	 * Transforma la clave y el valor en una consulta
-	 * @param clave
+	 * @param campo
 	 * @param valor
 	 * @return
 	 */
-	public MongoCursor<Document> leerInstrumento(String clave, String valor) {
-
-		MongoCursor<Document> cursor = coleccion.find(eq(clave, valor)).iterator();
-
+	public MongoCursor<Document> leerInstrumento(String campo, Object valor) {
+		MongoCursor<Document> cursor = coleccion.find(eq(campo, valor)).iterator();
 		return cursor;
 	}
 
 	/**
-	 * Transforma la clave y el valor en una consulta
-	 * @param clave
+	 * Elimina un registro
+	 * @param campo
 	 * @param valor
 	 * @return
 	 */
-	public MongoCursor<Document> leerInstrumento(String clave, Double valor) {
-
-		MongoCursor<Document> cursor = coleccion.find(eq(clave, valor)).iterator();
-
-		return cursor;
+	public DeleteResult eliminarInstrumento(String campo, Object valor) {
+	    Bson filtro = Filters.eq(campo, valor);
+	    DeleteResult resultado = coleccion.deleteOne(filtro);
+	    return resultado;
 	}
 
-	/**
-	 * Transforma la clave y el valor en una consulta
-	 * @param clave
-	 * @param valor
-	 * @return
-	 */
-	public MongoCursor<Document> leerInstrumento(String clave, Integer valor) {
-
-		MongoCursor<Document> cursor = coleccion.find(eq(clave, valor)).iterator();
-
-		return cursor;
+	public DeleteResult eliminarVariosInstrumentos(String campo, Object valor) {
+	    Bson filtro = Filters.eq(campo, valor);
+	    DeleteResult resultado = coleccion.deleteMany(filtro);
+	    return resultado;
 	}
-
 }

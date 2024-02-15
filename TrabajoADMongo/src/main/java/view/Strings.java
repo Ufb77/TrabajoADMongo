@@ -3,7 +3,7 @@ package view;
 import controller.Main;
 import librerias.IO;
 
-public class Vista_Instrumentos {
+public class Strings {
 
 	
 	/**

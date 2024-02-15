@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class ModificarYEliminar extends JFrame implements ActionListener, FocusListener{
+public class VtnModificarYEliminar extends JFrame implements ActionListener, FocusListener{
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -24,7 +24,7 @@ public class ModificarYEliminar extends JFrame implements ActionListener, FocusL
 	/**
 	 * Create the frame.
 	 */
-	public ModificarYEliminar(int operacion, String texto) {
+	public VtnModificarYEliminar(int operacion, String texto) {
 		setBounds(100, 100, 663, 408);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
@@ -73,16 +73,16 @@ public class ModificarYEliminar extends JFrame implements ActionListener, FocusL
 		// TODO Auto-generated method stub
 		
 		if(btnSiguiente == e.getSource()) {
-			if(operacion == General.MODIFICAR) {
+			if(operacion == VtnPrincipal.MODIFICAR) {
 				//OPERACION MOD BD
-				new General().setVisible(true);
-			}else if(operacion == General.ELIMINAR) {
-				new General().setVisible(true);
+				new VtnPrincipal().setVisible(true);
+			}else if(operacion == VtnPrincipal.ELIMINAR) {
+				new VtnPrincipal().setVisible(true);
 			}
 			
 			
 		}else if(btnCancelar == e.getSource()) {
-			new Resultados(operacion, texto).setVisible(true);
+			new VtnResultado(operacion, texto).setVisible(true);
 			dispose();
 		}
 		

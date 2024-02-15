@@ -12,7 +12,9 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 
 import bd.AccesoBdInstrumentos;
 import connection.MongoDB;
@@ -21,7 +23,7 @@ import view.VtnPrincipal;
 public class Main {
 
 	// Para mostrar
-	public static String nombre, familia, fabricante, accesorioInstrumental, material, tonalidad, formato,  conexion;
+	public static String nombre, familia, fabricante, accesorioInstrumental, material, tonalidad, formato, conexion;
 	public static Integer productionYear, numCuerdas, numTeclas, numTambores, numPedales;
 	public static Double precio, rating;
 
@@ -114,10 +116,9 @@ public class Main {
 		Main.numTambores = Integer.parseInt(tambores);
 	}
 
-	public static Double obtenerPrecio(String precio) {
+	public static void obtenerPrecio(String precio) {
 
-		Double precios = Double.parseDouble(precio);
-		return precios;
+		Main.precio = Double.parseDouble(precio);
 		
 	}
 
@@ -145,7 +146,6 @@ public class Main {
 	//1 - ¿PASAR TODOS LOS DATOS A STRING?
 	public static String obtenerConsulta(String clave, Object valor) {
 		StringBuilder texto = new StringBuilder();
-		System.out.println(clave + ",CONTENIDO DENTRO DEL METODO " +valor);
 		MongoCursor<Document> cursor = accessDB.leerInstrumento(clave, valor);
 		
 		 while (cursor.hasNext()) {
@@ -182,24 +182,38 @@ public class Main {
 	    }
 	}
 	
-	public static void modificarDocumento(String clave, Object valorActual, Object valorNuevo) {
-		Document docActualizar = accessDB.leerUnoInstrumento(clave, valorActual);
-		//VAS A LA VTN BUSCAR AL METODO QUE ABRE ABRE LA VENTANA A PARTIR DEL IF DE MODIFICAR
-		System.out.println("Entrando en el método...");
-		System.out.println(valorNuevo);
-		if(docActualizar != null) {  // Cambiado de == a !=
-			System.out.println("Se comprueba que no está vacío");
-			
-			Document updateDocument = new Document("$set", new Document(clave, valorNuevo));  // Usar $set para actualizar
-			
-			System.out.println("Se crea el nuevo documento");
-			
-			//ESTA ACCION QUE PUSISTE ES COSA DEL DAO Y LO QUE HE HECHO HA SIDO PASARLA AL DAO NADA MAS :))
-			accessDB.modificar(clave, valorNuevo, updateDocument);
-			
-			System.out.println("Actualizado");
-		} else {
-			System.err.println("Error, documento no encontrado para actualización.");
+//	public static void modificarDocumento(String clave, Object valorActual, Object valorNuevo) {
+//		Document docActualizar = accessDB.leerUnoInstrumento(clave, valorActual);
+//		//VAS A LA VTN BUSCAR AL METODO QUE ABRE ABRE LA VENTANA A PARTIR DEL IF DE MODIFICAR
+//		System.out.println("Entrando en el método...");
+//		System.out.println(valorNuevo);
+//		if(docActualizar != null) {  // Cambiado de == a !=
+//			System.out.println("Se comprueba que no está vacío");
+//			
+//			Document updateDocument = new Document("$set", new Document(clave, valorNuevo));  // Usar $set para actualizar
+//			
+//			System.out.println("Se crea el nuevo documento");
+//			
+//			//ESTA ACCION QUE PUSISTE ES COSA DEL DAO Y LO QUE HE HECHO HA SIDO PASARLA AL DAO NADA MAS :))
+//			
+//			
+//			System.out.println("Actualizado");
+//		} else {
+//			System.err.println("Error, documento no encontrado para actualización.");
+//		}
+//	}
+	
+	
+	public static String modifyOne(String clave, Object valorActual, Object valorNuevo) {
+		String resultado;
+		UpdateResult result = accessDB.modificarInstrumento(clave, valorActual, clave, valorNuevo);
+		
+		if (result.wasAcknowledged() && result.getModifiedCount() > 0) {
+			resultado = "La modificación ha sido exitosa";
+			return resultado;
+		}else {
+			resultado = "La modificacion ha sido imposible de realizar";
+			return resultado;
 		}
 	}
 	
@@ -209,7 +223,6 @@ public class Main {
 	public static void addDocument() {
 
 		toDocument();
-
 		accessDB.addInstrumento(documentoBD);
 		limpiarCampos();
 		documentoBD.clear();
@@ -301,147 +314,4 @@ public class Main {
 		}
 	}
 }
-
-//		if(!valor.matches("^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\\\\s]+$")) { //Contiene solo letras, espacios, acentos y ñ
-//			if(valor.contains(".")|| valor.contains(",")) {
-//				Double valorDecimal;
-//				valorDecimal = Double.valueOf(valor);
-//			}else if(valor.matches("^[0-9]+$")) {
-//				Integer valorNumerico;
-//				valorNumerico = Integer.valueOf(valor);
-//			}
-//		}else {
-//			
-//		}
-
-
-		//Comprobar si funciona
-//		for (Object object : lista) {
-//			if (object == null) {
-//				System.out.println("Nulo");
-//			}
-//		}
-
-
-//	/**
-//	 * Opciones CRUD
-//	 * @param bd
-//	 */
-//	public static void menuPpal(AccesoBdInstrumentos bd) {
-//		vi.menuGeneral();
-//		opcion = IO.readInt();
-//
-//		while (opcion != -1) {
-//
-//			switch (opcion) {
-//			case 1:
-//				menuAdd(bd);
-//				vi.menuGeneral();
-//				opcion = IO.readInt();
-//				break;
-//			case 2:
-//				break;
-//			case 3:
-//				break;
-//			case 4:
-//				break;
-//			default:
-//				vi.opcionNoVálida();
-//				break;
-//			}
-//		}
-//
-//	}
-//
-//	/**
-//	 * Opciones a la hora de añadir un instrumento. Funciona mal revisar
-//	 * @param bd
-//	 */
-//	public static void menuAdd(AccesoBdInstrumentos bd) {
-//		vi.menuAdd();
-//		opcion = IO.readInt();
-//
-//		while (opcion != -1 || opcion != -2) {
-//
-//			switch (opcion) {
-//
-//			case 1:
-//				vi.escribirNombre();
-//				nombre = IO.readString();
-//				documentoBD.put("Nombre", nombre); // put en vez de append porque sustituye si se encuentra en el
-//													// documento y no se van a hacer varios seguidos
-//				break;
-//			case 2:
-//				vi.escribirFamilia();
-//				familia = IO.readString();
-//				documentoBD.put("Familia", familia);
-//				break;
-//			case 3:
-//				vi.escribirAgnoFabricacion();
-//				productionYear = IO.readInt();
-//				documentoBD.put("Anyo fabricacion", productionYear);
-//				break;
-//			case 4:
-//				vi.escribirFabricante();
-//				fabricante = IO.readString();
-//				documentoBD.put("Fabricante", fabricante);
-//				break;
-//			case 5:
-//				vi.escribirPrecio();
-//				precio = IO.readDouble();
-//				documentoBD.put("Precio", precio);
-//				break;
-//			case 6:
-//				vi.escribirElementoTocar();
-//				AccesorioInstrumental = IO.readString();
-//				documentoBD.put("Elemento para tocar", AccesorioInstrumental);
-//				break;
-//			case 7:
-//				break;
-//			case 8:
-//				break;
-//			case 9:
-//				break;
-//			case 10:
-//				break;
-//			case 11:
-//				break;
-//			case 12:
-//				break;
-//			case 13:
-//				break;
-//			case 14:
-//				break;
-//			case 15:
-//				break;
-//			case -1:
-//				// Guarda el documento en la bd. Revisa que tenga lo mínimo imprescindible (los atributos generales)
-//
-//				if (documentoBD.containsKey("Nombre") && documentoBD.containsKey("Familia")
-//						&& documentoBD.containsKey("Anyo fabricacion") && documentoBD.containsKey("Fabricante")
-//						&& documentoBD.containsKey("Precio") && documentoBD.containsKey("Elemento para tocar")) {
-//
-//					bd.addInstrumento(documentoBD);
-//					break;
-//
-//				} else {
-//					vi.faltaElemento();
-//				}
-//				break;
-//			case -2:
-//				// Sale sin guardar
-//				break;
-//			default:
-//				vi.opcionNoVálida();
-//				break;
-//
-//			}
-//
-//			//Modificar esto para usar un do while
-//			vi.menuAdd();
-//			opcion = IO.readInt();
-//
-//		}
-//
-//	}
 

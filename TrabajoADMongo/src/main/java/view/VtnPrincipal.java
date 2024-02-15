@@ -1,21 +1,23 @@
 package view;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.UIManager;
 
-public class VtnPrincipal extends JFrame implements ActionListener, FocusListener {
+public class VtnPrincipal extends JFrame implements ActionListener, MouseListener {
 
 	private static final long serialVersionUID = 1L;
 
 	private JButton crear, modificar, buscar, borrar;
-	final static int BUSCAR = 1;
-	final static int MODIFICAR = 2;
-	final static int ELIMINAR = 3;
+	final static Integer BUSCAR = 1;
+	final static Integer MODIFICAR = 2;
+	final static Integer ELIMINAR = 3;
 
 	/**
 	 * Create the frame.
@@ -27,35 +29,28 @@ public class VtnPrincipal extends JFrame implements ActionListener, FocusListene
 
 
 		crear = new JButton("Crear");
-		crear.setBounds(142, 63, 100, 100);
+		crear.setBounds(150, 63, 100, 100);
 		getContentPane().add(crear);
 		crear.addActionListener(this);
+		crear.addMouseListener(this);
 
 		modificar = new JButton("Modificar");
-		modificar.setBounds(142, 207, 100, 100);
+		modificar.setBounds(150, 207, 100, 100);
 		getContentPane().add(modificar);
 		modificar.addActionListener(this);
+		modificar.addMouseListener(this);
 
 		buscar = new JButton("Buscar");
-		buscar.setBounds(439, 63, 100, 100);
+		buscar.setBounds(390, 63, 100, 100);
 		getContentPane().add(buscar);
 		buscar.addActionListener(this);
-
+		buscar.addMouseListener(this);
+		
 		borrar = new JButton("Eliminar");
-		borrar.setBounds(439, 207, 100, 100);
+		borrar.setBounds(390, 207, 100, 100);
 		getContentPane().add(borrar);
 		borrar.addActionListener(this);
-	}
-
-	@Override
-	public void focusGained(FocusEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void focusLost(FocusEvent e) {
-		// TODO Auto-generated method stub
+		borrar.addMouseListener(this);
 
 	}
 
@@ -77,5 +72,59 @@ public class VtnPrincipal extends JFrame implements ActionListener, FocusListene
 			dispose();
 		}
 
+	}
+
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		
+		if (crear == e.getSource()) {
+			crear.setBackground(Color.YELLOW);
+		}
+		else if (modificar == e.getSource()) {
+			modificar.setBackground(Color.CYAN);
+		}
+		else if (borrar == e.getSource()) {
+			borrar.setBackground(Color.MAGENTA);
+		}
+		else if (buscar == e.getSource()) {
+			buscar.setBackground(Color.PINK);
+		}
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		if (crear == e.getSource()) {
+			crear.setBackground(UIManager.getColor("Button.background"));
+		}
+		else if (modificar == e.getSource()) {
+			modificar.setBackground(UIManager.getColor("Button.background"));
+		}
+		else if (borrar == e.getSource()) {
+			borrar.setBackground(UIManager.getColor("Button.background"));
+		}
+		else if (buscar == e.getSource()) {
+			buscar.setBackground(UIManager.getColor("Button.background"));
+		}
+		
+	}
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

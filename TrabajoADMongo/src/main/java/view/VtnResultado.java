@@ -9,38 +9,33 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import java.awt.Font;
 
 public class VtnResultado extends JFrame implements ActionListener, FocusListener {
 
 	private static final long serialVersionUID = 1L;
-
-	JTextField resultados;
-	private JButton btnSiguiente;
-	private JButton btnCancelar;
-	private int operacion;
+	private JButton btnSiguiente, btnCancelar;
+	private Integer operacion;
 	private String texto;
 	private JScrollPane scrollPane;
 	private JTextArea textArea;
-	
 
-	/**
-	 * Create the frame.
-	 */
-	public VtnResultado(int operacion, String texto) {
+	public VtnResultado(Integer operacion, String texto) {
 		setBounds(100, 100, 663, 408);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		this.operacion = operacion;
 		this.texto = texto;
 
-		btnSiguiente = new JButton("Ok");
-		btnSiguiente.setBounds(535, 335, 89, 23);
+		btnSiguiente = new JButton("Aceptar");
+		btnSiguiente.setFont(new Font("Serif", Font.BOLD, 15));
+		btnSiguiente.setBounds(502, 325, 122, 33);
 		getContentPane().add(btnSiguiente);
 		btnSiguiente.addActionListener(this);
 
-		btnCancelar = new JButton("<-");
-		btnCancelar.setBounds(403, 335, 89, 23);
+		btnCancelar = new JButton("Cancelar");
+		btnCancelar.setFont(new Font("Serif", Font.BOLD, 15));
+		btnCancelar.setBounds(370, 325, 122, 33);
 		getContentPane().add(btnCancelar);
 		
 		scrollPane = new JScrollPane();
@@ -48,6 +43,7 @@ public class VtnResultado extends JFrame implements ActionListener, FocusListene
 		getContentPane().add(scrollPane);
 		
 		textArea = new JTextArea();
+		textArea.setFont(new Font("Rockwell", Font.PLAIN, 15));
 		textArea.setText(this.texto);
 		scrollPane.setViewportView(textArea);
 		btnCancelar.addActionListener(this);
@@ -76,7 +72,7 @@ public class VtnResultado extends JFrame implements ActionListener, FocusListene
 				new VtnPrincipal().setVisible(true);
 				dispose();
 			} else if (operacion == VtnPrincipal.MODIFICAR) {
-				new VtnModificarYEliminar(operacion, texto).setVisible(true);
+				new VtnPrincipal().setVisible(true);
 				dispose();
 			} else if (operacion == VtnPrincipal.ELIMINAR) {
 				new VtnPrincipal().setVisible(true);

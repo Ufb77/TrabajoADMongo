@@ -9,6 +9,8 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
+import com.mongodb.client.model.Updates;
 
 public class AccesoBdInstrumentos {
 
@@ -21,7 +23,6 @@ public class AccesoBdInstrumentos {
 
 	/**
 	 * Inserta un instrumento
-	 * 
 	 * @param documento
 	 */
 	public void addInstrumento(Document documento) {
@@ -31,7 +32,7 @@ public class AccesoBdInstrumentos {
 	
 	
 	/**
-	 * Transforma la clave y el valor en una consulta
+	 * Transforma el campo y el valor en una consulta
 	 * @param campo
 	 * @param valor
 	 * @return
@@ -42,31 +43,21 @@ public class AccesoBdInstrumentos {
 	}
 	
 	/**
-	 * Transforma la clave y el valor en una consulta que devuelve un solo Objeto
+	 * Modifica un documento en relacion a la condicion campo - valor
 	 * @param clave
 	 * @param valor
+	 * @param campoAModificar
+	 * @param nuevoValor
 	 * @return
 	 */
-	public Document leerUnoInstrumento(String clave, Object valor) {
-		// Quitamos la Id para que sea más cómodo de leer
-		
-		Document doc = coleccion.find(eq(clave, valor))
-				.first();
-		
-		if(doc == null) {
-			System.err.println("Error, no se ha encontrado" + valor.toString() + doc);
-		}
-		return doc;
-				
-	}
-	
-	//AQUI ESTA EL UPDATE
-	public void modificar(String clave, Object valor, Document updateDocument) {
-		coleccion.updateOne(Filters.eq(clave, valor), updateDocument);
-	}
+    public UpdateResult modificarInstrumento(String clave, Object valor, String campoAModificar, Object nuevoValor) {
+        Bson filtro = eq(clave, valor);
+        Bson actualizacion = Updates.set(campoAModificar, nuevoValor);
+        return coleccion.updateOne(filtro, actualizacion);
+    }
 	
 	/**
-	 * Elimina un registro
+	 * Elimina un documento que cumpla la condicion campo - valor 
 	 * @param campo
 	 * @param valor
 	 * @return
@@ -77,6 +68,12 @@ public class AccesoBdInstrumentos {
 	    return resultado;
 	}
 
+	/**
+	 * Elimina todos los documentos que cumplan la condicion campo - valor 
+	 * @param campo
+	 * @param valor
+	 * @return
+	 */
 	public DeleteResult eliminarVariosInstrumentos(String campo, Object valor) {
 	    Bson filtro = Filters.eq(campo, valor);
 	    DeleteResult resultado = coleccion.deleteMany(filtro);

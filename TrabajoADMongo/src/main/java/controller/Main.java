@@ -1,6 +1,8 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bson.Document;
 
@@ -39,7 +41,7 @@ public class Main {
 //	static int opcion = 0;
 
 	static Document documentoBD = new Document(); // Documento a escribir
-	static Document salidaBD = new Document(); //Documento para crear la salida{formato, conexion}
+	static Document salidaBD = new Document(); // Documento para crear la salida{formato, conexion}
 
 	/**
 	 * Imprime de forma legible el json
@@ -62,8 +64,20 @@ public class Main {
 	}
 
 	public static void obtenerNombre(String nombre) {
+		// Validar el nombre con la expresión regular
+		String regex = "[\\p{L}&&[^\u2000-\u206F\u2E00-\u2E7F\\s]]+";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(nombre);
 
-		Main.nombre = nombre;
+		if (matcher.matches() && nombre != null) {
+			// El nombre cumple con la expresión regular, puedes guardarlo
+			Main.nombre = nombre;
+			System.out.println("Nombre válido: " + nombre);
+		} else {
+			// El nombre no cumple con la expresión regular, puedes manejarlo de alguna
+			// manera
+			System.out.println("Nombre no válido: " + nombre);
+		}
 	}
 
 	public static void obtenerFamilia(String familia) {
@@ -119,7 +133,7 @@ public class Main {
 	public static void obtenerPrecio(String precio) {
 
 		Main.precio = Double.parseDouble(precio);
-		
+
 	}
 
 	public static void obtenerClasificacion(String clasificacion) {
@@ -139,49 +153,71 @@ public class Main {
 
 	/**
 	 * Crea la consulta que genera la vista y la mandao al dao
+	 * 
 	 * @param clave
 	 * @param valor
 	 * @return el texto a escribir en la ventana de resultados
 	 */
-	//1 - ¿PASAR TODOS LOS DATOS A STRING?
+	// 1 - ¿PASAR TODOS LOS DATOS A STRING?
 	public static String obtenerConsulta(String clave, Object valor) {
 		StringBuilder texto = new StringBuilder();
 		MongoCursor<Document> cursor = accessDB.leerInstrumento(clave, valor);
-		
-		 while (cursor.hasNext()) {
-		        texto.append(pretty(cursor.next().toJson()));
-		    }
-		 
+
+		while (cursor.hasNext()) {
+			texto.append(pretty(cursor.next().toJson()));
+		}
+
 		cursor.close();
 		return texto.toString();
 	}
-	
-	
+
 	public static String deleteInstrument(String clave, Object valor) {
 		String resultado;
-	    DeleteResult result = accessDB.eliminarInstrumento(clave, valor);
-	    if (result.wasAcknowledged() && result.getDeletedCount() > 0) {
-	        resultado = "Instrumento borrado con exito";
-	    	return resultado;
-	    } else {
-	    	resultado =  "No se ha borrado ningun instrumento";
-	        return resultado;
-	    }
+		DeleteResult result = accessDB.eliminarInstrumento(clave, valor);
+		if (result.wasAcknowledged() && result.getDeletedCount() > 0) {
+			resultado = "Instrumento borrado con exito";
+			return resultado;
+		} else {
+			resultado = "No se ha borrado ningun instrumento";
+			return resultado;
+		}
 	}
 
-
-	public static String deleteManyInstruments(String campo, Object valor) {
+	public static String deleteManyInstruments(String campo, String valor) {
 		String resultado;
-	    DeleteResult result = accessDB.eliminarVariosInstrumentos(campo, valor);
-	    if (result.wasAcknowledged() && result.getDeletedCount() > 0) {
-	        resultado = "Los instrumentos que cumplian la condicion han sido eliminados";
-	    	return resultado;
-	    } else {
-	    	resultado =  "No se ha borrado ningun instrumento";
-	        return resultado;
-	    }
+		DeleteResult result;
+		Double valorDouble;
+		Integer valorInteger;
+
+		if (campo.equalsIgnoreCase("Precio") || campo.equalsIgnoreCase("Número de cuerdas")
+				|| campo.equalsIgnoreCase("Número de teclas") || campo.equalsIgnoreCase("Número de tambores") ||
+
+				campo.equalsIgnoreCase("Número de pedales")) {
+
+			valorInteger = Integer.valueOf(valor);
+
+			result = accessDB.eliminarVariosInstrumentos(campo, valorInteger);
+
+		} else if (campo.equalsIgnoreCase("Precio") || campo.equalsIgnoreCase("Clasificación")) {
+
+			valorDouble = Double.valueOf(valor);
+
+			result = accessDB.eliminarVariosInstrumentos(campo, valorDouble);
+
+		} else {
+
+			result = accessDB.eliminarVariosInstrumentos(campo, valor);
+
+		}
+		if (result.wasAcknowledged() && result.getDeletedCount() > 0) {
+			resultado = "Instrumento borrado con exito";
+			return resultado;
+		} else {
+			resultado = "No se ha borrado ningun instrumento";
+			return resultado;
+		}
 	}
-	
+
 //	public static void modificarDocumento(String clave, Object valorActual, Object valorNuevo) {
 //		Document docActualizar = accessDB.leerUnoInstrumento(clave, valorActual);
 //		//VAS A LA VTN BUSCAR AL METODO QUE ABRE ABRE LA VENTANA A PARTIR DEL IF DE MODIFICAR
@@ -202,21 +238,20 @@ public class Main {
 //			System.err.println("Error, documento no encontrado para actualización.");
 //		}
 //	}
-	
-	
+
 	public static String modifyOne(String clave, Object valorActual, Object valorNuevo) {
 		String resultado;
 		UpdateResult result = accessDB.modificarInstrumento(clave, valorActual, clave, valorNuevo);
-		
+
 		if (result.wasAcknowledged() && result.getModifiedCount() > 0) {
 			resultado = "La modificación ha sido exitosa";
 			return resultado;
-		}else {
+		} else {
 			resultado = "La modificacion ha sido imposible de realizar";
 			return resultado;
 		}
 	}
-	
+
 	/**
 	 * Manda al dao los datos a escribir y limpia todo tras hacerlo.
 	 */
@@ -233,57 +268,58 @@ public class Main {
 	 * Crea el documento a escribir en la base de datos
 	 */
 	private static void toDocument() {
-
-		documentoBD.put("Nombre", Main.nombre);
-		documentoBD.put("Familia", Main.familia);
-		documentoBD.put("Fabricante", Main.fabricante);
-		documentoBD.put("Precio", Main.precio);
+		if (Main.nombre != null && !Main.nombre.isEmpty() && Main.familia != null && !Main.familia.isEmpty()
+				&& Main.fabricante != null && !Main.fabricante.isEmpty() && Main.precio != null) {
+			// Realizar la inserción en la base de datos solo si todas las variables no
+			// están vacías
+			documentoBD.append("Nombre", Main.nombre).append("Familia", Main.familia)
+					.append("Fabricante", Main.fabricante).append("Precio", Main.precio);
+		} else {
+			// Manejar el caso en el que alguna variable está vacía
+			System.out.println("No se pueden añadir datos con campos vacíos");
+			documentoBD.remove("_id");
+			return;
+		}
 
 		if (tonalidad != null) {
-			documentoBD.put("Tonalidad", Main.tonalidad);
+			documentoBD.append("Tonalidad", Main.tonalidad);
 		}
 
 		if (numCuerdas != null) {
-			documentoBD.put("Número de cuerdas", Main.numCuerdas);
+			documentoBD.append("Número de cuerdas", Main.numCuerdas);
 		}
 
 		if (numTambores != null) {
-			documentoBD.put("Número de tambores", Main.numTambores);
+			documentoBD.append("Número de tambores", Main.numTambores);
 		}
 
 		if (numTeclas != null) {
-			documentoBD.put("Número de teclas", Main.numTeclas);
+			documentoBD.append("Número de teclas", Main.numTeclas);
 		}
 
 		if (numPedales != null) {
-			documentoBD.put("Número de pedales", Main.numPedales);
+			documentoBD.append("Número de pedales", Main.numPedales);
 		}
 
 		if (material != null) {
-			documentoBD.put("Material", Main.material);
+			documentoBD.append("Material", Main.material);
 		}
 
 		if (rating != null) {
-			documentoBD.put("Clasificación", Main.rating);
+			documentoBD.append("Clasificación", Main.rating);
 		}
 
 		if (accesorioInstrumental != null) {
-			documentoBD.put("Accesorio para tocar", Main.accesorioInstrumental);
+			documentoBD.append("Accesorio para tocar", Main.accesorioInstrumental);
 		}
 
 		if (formato != null && conexion != null) {
-			salidaBD.put("Formato", Main.formato);
-			salidaBD.put("Conexion", Main.conexion);
-			documentoBD.put("Salida", salidaBD);
-
+			documentoBD.append("Salida", new Document("Formato", Main.formato).append("Conexion", Main.conexion));
 		} else if (formato == null) {
-			salidaBD.put("Conexion", Main.conexion);
-			documentoBD.put("Salida", salidaBD);
+			documentoBD.append("Salida", new Document("Conexion", Main.conexion));
 		} else if (conexion == null) {
-			salidaBD.put("Formato", Main.formato);
-			documentoBD.put("Salida", salidaBD);
+			documentoBD.append("Salida", new Document("Formato", Main.formato));
 		}
-
 	}
 
 	/**
@@ -314,4 +350,3 @@ public class Main {
 		}
 	}
 }
-

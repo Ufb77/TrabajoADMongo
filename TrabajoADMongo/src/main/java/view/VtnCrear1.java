@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,6 +15,8 @@ import javax.swing.JTextField;
 import controller.Main;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public class VtnCrear1 extends JFrame implements ActionListener, FocusListener{
 
@@ -20,6 +24,7 @@ public class VtnCrear1 extends JFrame implements ActionListener, FocusListener{
 	private static final String[] PLACEHOLDER = {"Nombre","Fabricante","Familia","Precio"};
 	private JTextField textNombre, textFabricante, textFamilia, textPrecio;
 	private JButton btnSiguiente, btnCancelar;
+	
 
 	/**
 	 * Create the frame.
@@ -65,14 +70,83 @@ public class VtnCrear1 extends JFrame implements ActionListener, FocusListener{
 		btnSiguiente.setFont(new Font("Serif", Font.BOLD, 15));
 		btnSiguiente.setBounds(502, 325, 104, 36);
 		getContentPane().add(btnSiguiente);
+		btnSiguiente.setEnabled(false);
 		btnSiguiente.addActionListener(this);
 		btnCancelar = new JButton("Cancelar");
 		btnCancelar.setFont(new Font("Serif", Font.BOLD, 15));
 		btnCancelar.setBounds(388, 325, 104, 36);
 		getContentPane().add(btnCancelar);
 		btnCancelar.addActionListener(this);
+		
+		addDocumentListenerToTextField(textNombre);
+        addDocumentListenerToTextField(textFabricante);
+        addDocumentListenerToTextField(textFamilia);
+        addDocumentListenerToTextField(textPrecio);
 
 	}
+	
+	private void actualizarVisibilidadBoton() {
+        String nombre = textNombre.getText();
+        String fabricante = textFabricante.getText();
+        String familia = textFamilia.getText();
+        String precioStr = textPrecio.getText().trim();
+
+        boolean camposNoVacios = !nombre.isEmpty() && !fabricante.isEmpty() && !familia.isEmpty();
+
+        boolean precioValido = false;
+        boolean familiaValida = validarFamilia(familia);
+        boolean fabricanteValido = validarNombre(fabricante);
+        boolean nombreValido = validarNombre(nombre);
+        try {
+            double precio = Double.parseDouble(precioStr);
+            precioValido = precio > 0;
+        } catch (NumberFormatException ignored) {
+            // No es un Double válido
+        }
+        
+            if (nombreValido) {
+                textNombre.setForeground(Color.BLACK);
+            } else {
+                textNombre.setForeground(Color.RED);
+            }
+            if (fabricanteValido) {
+                textFabricante.setForeground(Color.BLACK);
+            } else {
+                textFabricante.setForeground(Color.RED);
+            }
+            if (familiaValida) {
+                textFamilia.setForeground(Color.BLACK);
+            } else {
+                textFamilia.setForeground(Color.RED);
+            }
+
+            camposNoVacios = camposNoVacios && nombreValido;
+        
+
+        btnSiguiente.setEnabled(camposNoVacios && precioValido);
+    }
+	
+	private void addDocumentListenerToTextField(JTextField textField) {
+        textField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                actualizarVisibilidadBoton();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                actualizarVisibilidadBoton();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                actualizarVisibilidadBoton();
+            }
+
+        });
+    }
+	
+	
 
 	@Override
 	public void focusGained(FocusEvent e) {
@@ -125,8 +199,10 @@ public class VtnCrear1 extends JFrame implements ActionListener, FocusListener{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 	
+		
 		if(btnSiguiente == e.getSource()) {
 //			Main.addDocument();
+			
 			
 			new VtnCrear2().setVisible(true);
 			dispose();
@@ -136,6 +212,28 @@ public class VtnCrear1 extends JFrame implements ActionListener, FocusListener{
 		}
 		
 	}
+	private boolean validarNombre(String nombre) {
+        // Expresión regular para permitir letras, 'ñ' y acentos, y limitar la longitud a 30 caracteres
+        String regex = "[\\p{L}&&[^\u2000-\u206F\u2E00-\u2E7F\\s]]{1,30}";
+
+        // Validar con la expresión regular
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(nombre);
+
+        return matcher.matches();
+    }
+	
+	private boolean validarFamilia(String familia) {
+        // Expresión regular para permitir letras, 'ñ' y acentos, y limitar la longitud a 30 caracteres
+        String regex = "[\\p{L}&&[^\u2000-\u206F\u2E00-\u2E7F\\s]]{1,20}";
+
+        // Validar con la expresión regular
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(familia);
+
+        return matcher.matches();
+    }
+	
 	
 //	IDEA PLACEHOLDER A LA HORA DE CREAR Y BUSCAR
 //	@Override

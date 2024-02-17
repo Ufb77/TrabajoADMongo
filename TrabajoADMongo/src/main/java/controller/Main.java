@@ -64,20 +64,7 @@ public class Main {
 	}
 
 	public static void obtenerNombre(String nombre) {
-		// Validar el nombre con la expresión regular
-		String regex = "[\\p{L}&&[^\u2000-\u206F\u2E00-\u2E7F\\s]]+";
-		Pattern pattern = Pattern.compile(regex);
-		Matcher matcher = pattern.matcher(nombre);
-
-		if (matcher.matches() && nombre != null) {
-			// El nombre cumple con la expresión regular, puedes guardarlo
-			Main.nombre = nombre;
-			System.out.println("Nombre válido: " + nombre);
-		} else {
-			// El nombre no cumple con la expresión regular, puedes manejarlo de alguna
-			// manera
-			System.out.println("Nombre no válido: " + nombre);
-		}
+		Main.nombre = nombre;
 	}
 
 	public static void obtenerFamilia(String familia) {
@@ -159,63 +146,125 @@ public class Main {
 	 * @return el texto a escribir en la ventana de resultados
 	 */
 	// 1 - ¿PASAR TODOS LOS DATOS A STRING?
-	public static String obtenerConsulta(String clave, Object valor) {
-		StringBuilder texto = new StringBuilder();
-		MongoCursor<Document> cursor = accessDB.leerInstrumento(clave, valor);
+	
+	public static String obtenerConsulta(String clave, String valor) {
+	    StringBuilder texto = new StringBuilder();
 
-		while (cursor.hasNext()) {
-			texto.append(pretty(cursor.next().toJson()));
-		}
+	    try {
+	        if (isInteger(valor)) {
+	            // Para búsqueda de tipo Integer
+	            Integer valorInteger = Integer.parseInt(valor);
+	            MongoCursor<Document> cursor = accessDB.leerInstrumento(clave, valorInteger);
 
-		cursor.close();
-		return texto.toString();
+	            while (cursor.hasNext()) {
+	                texto.append(pretty(cursor.next().toJson()));
+	            }
+
+	            cursor.close();
+	        } else if (isDouble(valor)) {
+	            // Para búsqueda de tipo Double
+	            Double valorDouble = Double.parseDouble(valor);
+	            MongoCursor<Document> cursor = accessDB.leerInstrumento(clave, valorDouble);
+
+	            while (cursor.hasNext()) {
+	                texto.append(pretty(cursor.next().toJson()));
+	            }
+
+	            cursor.close();
+	        } else {
+	            // Para búsqueda de tipo String
+	            MongoCursor<Document> cursor = accessDB.leerInstrumento(clave, valor);
+
+	            while (cursor.hasNext()) {
+	                texto.append(pretty(cursor.next().toJson()));
+	            }
+
+	            cursor.close();
+	        }
+	    } catch (Exception e) {
+	        texto.append("Error al realizar la consulta: " + e.getMessage());
+	    }
+
+	    return texto.toString();
 	}
 
-	public static String deleteInstrument(String clave, Object valor) {
-		String resultado;
-		DeleteResult result = accessDB.eliminarInstrumento(clave, valor);
-		if (result.wasAcknowledged() && result.getDeletedCount() > 0) {
-			resultado = "Instrumento borrado con exito";
-			return resultado;
-		} else {
-			resultado = "No se ha borrado ningun instrumento";
-			return resultado;
-		}
+
+
+
+	public static String deleteInstrument(String campo, String valor) {
+	    String resultado;
+
+	    try {
+	        DeleteResult result;
+
+	        if (isInteger(valor)) {
+	            Integer valorInteger = Integer.valueOf(valor);
+	            result = accessDB.eliminarInstrumento(campo, valorInteger);
+	        } else if (isDouble(valor)) {
+	            Double valorDouble = Double.valueOf(valor);
+	            result = accessDB.eliminarInstrumento(campo, valorDouble);
+	        } else {
+	            result = accessDB.eliminarInstrumento(campo, valor);
+	        }
+
+	        if (result.wasAcknowledged() && result.getDeletedCount() > 0) {
+	            resultado = "Instrumento eliminado con éxito";
+	        } else {
+	            resultado = "No se ha eliminado ningún instrumento";
+	        }
+	    } catch (NumberFormatException e) {
+	        resultado = "Error: El valor no es un número válido";
+	    }
+
+	    return resultado;
 	}
+
 
 	public static String deleteManyInstruments(String campo, String valor) {
-		String resultado;
-		DeleteResult result;
-		Double valorDouble;
-		Integer valorInteger;
+	    String resultado;
+	    DeleteResult result;
 
-		if (campo.equalsIgnoreCase("Precio") || campo.equalsIgnoreCase("Número de cuerdas")
-				|| campo.equalsIgnoreCase("Número de teclas") || campo.equalsIgnoreCase("Número de tambores") ||
+	    try {
+	        if (isInteger(valor)) {
+	            Integer valorInteger = Integer.valueOf(valor);
+	            result = accessDB.eliminarVariosInstrumentos(campo, valorInteger);
+	        } else if (isDouble(valor)) {
+	            Double valorDouble = Double.valueOf(valor);
+	            result = accessDB.eliminarVariosInstrumentos(campo, valorDouble);
+	        } else {
+	            result = accessDB.eliminarVariosInstrumentos(campo, valor);
+	        }
 
-				campo.equalsIgnoreCase("Número de pedales")) {
+	        if (result.wasAcknowledged() && result.getDeletedCount() > 0) {
+	            resultado = "Instrumento borrado con éxito";
+	        } else {
+	            resultado = "No se ha borrado ningún instrumento";
+	        }
+	    } catch (NumberFormatException e) {
+	        resultado = "Error: El valor no es un número válido";
+	    }
 
-			valorInteger = Integer.valueOf(valor);
+	    return resultado;
+	}
+	
+	// Método auxiliar para verificar si una cadena representa un número entero
+	private static boolean isInteger(String str) {
+	    try {
+	        Integer.parseInt(str);
+	        return true;
+	    } catch (NumberFormatException e) {
+	        return false;
+	    }
+	}
 
-			result = accessDB.eliminarVariosInstrumentos(campo, valorInteger);
-
-		} else if (campo.equalsIgnoreCase("Precio") || campo.equalsIgnoreCase("Clasificación")) {
-
-			valorDouble = Double.valueOf(valor);
-
-			result = accessDB.eliminarVariosInstrumentos(campo, valorDouble);
-
-		} else {
-
-			result = accessDB.eliminarVariosInstrumentos(campo, valor);
-
-		}
-		if (result.wasAcknowledged() && result.getDeletedCount() > 0) {
-			resultado = "Instrumento borrado con exito";
-			return resultado;
-		} else {
-			resultado = "No se ha borrado ningun instrumento";
-			return resultado;
-		}
+	// Método auxiliar para verificar si una cadena representa un número de punto flotante (double)
+	private static boolean isDouble(String str) {
+	    try {
+	        Double.parseDouble(str);
+	        return true;
+	    } catch (NumberFormatException e) {
+	        return false;
+	    }
 	}
 
 //	public static void modificarDocumento(String clave, Object valorActual, Object valorNuevo) {
@@ -239,18 +288,47 @@ public class Main {
 //		}
 //	}
 
-	public static String modifyOne(String clave, Object valorActual, Object valorNuevo) {
-		String resultado;
-		UpdateResult result = accessDB.modificarInstrumento(clave, valorActual, clave, valorNuevo);
+	public static String modifyOne(String clave, String valorActual, String nuevoValor) {
+	    String resultado;
 
-		if (result.wasAcknowledged() && result.getModifiedCount() > 0) {
-			resultado = "La modificación ha sido exitosa";
-			return resultado;
-		} else {
-			resultado = "La modificacion ha sido imposible de realizar";
-			return resultado;
-		}
+	    try {
+	        // Realizar conversiones según el tipo de clave y nuevoValor
+	        Object valorActualConvertido;
+	        Object nuevoValorConvertido;
+
+	        if (isInteger(valorActual)) {
+	            valorActualConvertido = Integer.parseInt(valorActual);
+	        } else if (isDouble(valorActual)) {
+	            valorActualConvertido = Double.parseDouble(valorActual);
+	        } else {
+	            valorActualConvertido = valorActual;
+	        }
+
+	        if (isInteger(nuevoValor)) {
+	            nuevoValorConvertido = Integer.parseInt(nuevoValor);
+	        } else if (isDouble(nuevoValor)) {
+	            nuevoValorConvertido = Double.parseDouble(nuevoValor);
+	        } else {
+	            nuevoValorConvertido = nuevoValor;
+	        }
+
+	        // Llamar al método modificarInstrumento con los valores convertidos
+	        UpdateResult result = accessDB.modificarInstrumento(clave, valorActualConvertido, clave, nuevoValorConvertido);
+
+	        if (result.wasAcknowledged() && result.getModifiedCount() > 0) {
+	            resultado = "La modificación ha sido exitosa";
+	        } else {
+	            resultado = "La modificación ha sido imposible de realizar";
+	        }
+	    } catch (Exception e) {
+	        resultado = "Error durante la modificación: " + e.getMessage();
+	    }
+
+	    return resultado;
 	}
+
+
+
 
 	/**
 	 * Manda al dao los datos a escribir y limpia todo tras hacerlo.

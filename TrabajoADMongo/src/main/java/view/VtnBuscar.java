@@ -96,6 +96,7 @@ public class VtnBuscar extends JFrame implements ActionListener, FocusListener {
 		String texto;
 		if (btnSiguiente == e.getSource()) {
 			if (operacion == VtnPrincipal.BUSCAR) {
+				
 				texto = Main.obtenerConsulta(claves.getSelectedItem().toString(), valor.getText()); 
 				new VtnResultado(operacion,texto).setVisible(true);
 				dispose();

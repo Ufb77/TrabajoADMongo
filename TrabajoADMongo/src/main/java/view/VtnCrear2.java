@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -12,6 +14,10 @@ import javax.swing.JTextField;
 
 import controller.Main;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
 import java.awt.Font;
 
 public class VtnCrear2 extends JFrame implements ActionListener, FocusListener{
@@ -20,7 +26,7 @@ public class VtnCrear2 extends JFrame implements ActionListener, FocusListener{
 	private JTextField textTonalidad, textNumCuerdas, textNumTambores, txtMaterial, txtClasificacion, 
 	txtElementoParaTocar, txtFormato, txtConexion, textNumTeclas, textNumPedales;
 	private static final String[] PLACEHOLDER = {"Tonalidad", "NumCuerdas", "NumTambores", "NumTeclas", "NumPedales", "Material", "Clasificacion", 
-			"Elemento para tocar", "Formato", "Conexion"};
+			"Accesorio", "Formato", "Conexion"};
 	private JButton btnAdd, btnAtras;
 	
 
@@ -118,14 +124,212 @@ public class VtnCrear2 extends JFrame implements ActionListener, FocusListener{
 		btnAdd.setBounds(517, 322, 104, 36);
 		getContentPane().add(btnAdd);
 		btnAdd.addActionListener(this);
+		btnAdd.setEnabled(false);
 		
 		btnAtras = new JButton("Cancelar");
 		btnAtras.setFont(new Font("Serif", Font.BOLD, 15));
 		btnAtras.setBounds(404, 322, 104, 36);
 		getContentPane().add(btnAtras);
 		btnAtras.addActionListener(this);
+		
+		addDocumentListenerToTextField(txtElementoParaTocar);
+		addDocumentListenerToTextField(txtMaterial);
+		addDocumentListenerToTextField(textTonalidad);
+		addDocumentListenerToTextField(txtFormato);
+		addDocumentListenerToTextField(txtConexion);
+		addDocumentListenerToTextField(textNumTambores);
+		addDocumentListenerToTextField(textNumPedales);
+		addDocumentListenerToTextField(textNumCuerdas);
+		addDocumentListenerToTextField(textNumTeclas);
+		addDocumentListenerToTextField(txtClasificacion);
+	}
+	
+	private void actualizarVisibilidadBoton() {
+	    String elementoParaTocar = txtElementoParaTocar.getText();
+	    Boolean tocarValido = validarString(elementoParaTocar);
+	    
+	    String material = txtMaterial.getText().trim();
+	    Boolean materialValido = validarString(material);
+	    
+	    String tonalidad = textTonalidad.getText().trim();
+	    Boolean tonalidadValida = validarString(tonalidad);
+	    
+	    String formato = txtFormato.getText().trim();
+	    Boolean formatoValido = validarString(formato);
+	    
+	    String conexion = txtConexion.getText().trim();
+	    Boolean conexionValida = validarString(conexion);
+	    
+	    String numTambores = textNumTambores.getText().trim();
+	    Boolean tamboresValido = validarInteger(numTambores);
+	    
+	    String numPedales = textNumPedales.getText().trim();
+	    Boolean pedalesValido = validarInteger(numPedales);
+	    
+	    String numCuerdas = textNumCuerdas.getText().trim();
+	    Boolean cuerdasValido = validarInteger(numCuerdas);
+	    
+	    String numTeclas = textNumTeclas.getText().trim();
+	    Boolean teclasValido = validarInteger(numTeclas) ;
+	    
+	    String clasificacion = txtClasificacion.getText().trim();
+	    Boolean clasificacionValido = validarDouble(clasificacion);
+	    
+	    
+	    Boolean camposValidos;
+
+	    if (tocarValido) {
+	        txtElementoParaTocar.setForeground(Color.BLACK);
+	    } else {
+	        txtElementoParaTocar.setForeground(Color.RED);
+	    }
+	    
+	    if (materialValido) {
+	        txtMaterial.setForeground(Color.BLACK);
+	    } else {
+	        txtMaterial.setForeground(Color.RED);
+	    }
+	    
+	    if (tonalidadValida) {
+	        textTonalidad.setForeground(Color.BLACK);
+	    } else {
+	        textTonalidad.setForeground(Color.RED);
+	    }
+	    
+	    if (formatoValido) {
+	        txtFormato.setForeground(Color.BLACK);
+	    } else {
+	        txtFormato.setForeground(Color.RED);
+	    }
+	    
+	    if (conexionValida) {
+	        txtConexion.setForeground(Color.BLACK);
+	    } else {
+	        txtConexion.setForeground(Color.RED);
+	    }
+
+	    if (tamboresValido) {
+	        textNumTambores.setForeground(Color.BLACK);
+	    } else {
+	        textNumTambores.setForeground(Color.RED);
+	    }
+
+	    if (pedalesValido) {
+	        textNumPedales.setForeground(Color.BLACK);
+	    } else {
+	        textNumPedales.setForeground(Color.RED);
+	    }
+
+	    if (cuerdasValido) {
+	        textNumCuerdas.setForeground(Color.BLACK);
+	    } else {
+	        textNumCuerdas.setForeground(Color.RED);
+	    }
+
+	    if (teclasValido) {
+	        textNumTeclas.setForeground(Color.BLACK);
+	    } else {
+	        textNumTeclas.setForeground(Color.RED);
+	    }
+
+	    if (clasificacionValido) {
+	        txtClasificacion.setForeground(Color.BLACK);
+	    } else {
+	        txtClasificacion.setForeground(Color.RED);
+	    }
+	    
+	    if (materialValido) {
+	    	
+	    }
+
+	    camposValidos = tocarValido 
+	    		&& tamboresValido 
+	    		&& pedalesValido 
+	    		&& cuerdasValido
+	    		&& teclasValido 
+	    		&& clasificacionValido
+	            && validarString(material)
+	            && validarString(tonalidad)
+	            && validarString(formato)
+	            && validarString(conexion);
+
+	    btnAdd.setEnabled(camposValidos);
 	}
 
+	
+	private boolean validarString(String cadenaTexto) {
+		String regex = "[\\p{L}-&&[^\u2000-\u206F\u2E00-\u2E7F\\s]]{0,30}";
+		
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(cadenaTexto);
+		if (cadenaTexto == null) {
+			return true;
+		} else {
+		return matcher.matches();
+		}
+	}
+	
+	private boolean validarInteger(String numero) {
+		
+		if (numero != null && !numero.trim().isEmpty()) {
+	        for (String placeholder : PLACEHOLDER) {
+	            if (numero.trim().equalsIgnoreCase(placeholder)) {
+	            	numero = null;
+	                return true; // Si el número coincide con un placeholder, se considera nulo y válido
+	            }
+	        }
+	        try {
+	            Integer valor = Integer.parseInt(numero);
+	            return valor > 0;
+	        } catch (NumberFormatException e) {
+	            return false;
+	        }
+	    } else {
+	        return true; // Devuelve true si el número es nulo o está vacío
+	    }
+	}
+	
+	
+	private boolean validarDouble(String numero) {
+		if (numero != null && !numero.trim().isEmpty()) {
+	        for (String placeholder : PLACEHOLDER) {
+	            if (numero.trim().equalsIgnoreCase(placeholder)) {
+	            	numero = null;
+	                return true; // Si el número coincide con un placeholder, se considera nulo y válido
+	            }
+	        }
+	        try {
+	            double valor = Double.parseDouble(numero);
+	            return valor >= 0;
+	        } catch (NumberFormatException e) {
+	            return false;
+	        }
+	    } else {
+	        return true; // Devuelve true si el número es nulo o está vacío
+	    }
+	}
+
+	
+
+	private void addDocumentListenerToTextField(JTextField textField) {
+        textField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                actualizarVisibilidadBoton();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                actualizarVisibilidadBoton();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                actualizarVisibilidadBoton();
+            }
+
+        });
+    }
 
 	@Override
 	public void focusGained(FocusEvent e) {
@@ -208,6 +412,18 @@ public class VtnCrear2 extends JFrame implements ActionListener, FocusListener{
 				Main.obtenerConexion(txtConexion.getText());
 			}
 		}
+	}
+	private boolean esNumeroValido(JTextField campo, boolean valido) {
+	    if (campo != null) {
+	        if (!valido) {
+	            // Establecer el color de fondo en rojo si el valor no es válido
+	            campo.setBackground(Color.RED);
+	        } else {
+	            // Restaurar el color de fondo predeterminado si el valor es válido
+	            campo.setBackground(UIManager.getColor("TextField.background"));
+	        }
+	    }
+	    return valido;
 	}
 
 

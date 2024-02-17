@@ -104,6 +104,11 @@ public class VtnCrear1 extends JFrame implements ActionListener, FocusListener{
             // No es un Double válido
         }
         
+        if (precioValido) {
+        	textPrecio.setForeground(Color.BLACK);
+        } else {
+        	textPrecio.setForeground(Color.RED);
+        }
             if (nombreValido) {
                 textNombre.setForeground(Color.BLACK);
             } else {
@@ -214,7 +219,7 @@ public class VtnCrear1 extends JFrame implements ActionListener, FocusListener{
 	}
 	private boolean validarNombre(String nombre) {
         // Expresión regular para permitir letras, 'ñ' y acentos, y limitar la longitud a 30 caracteres
-        String regex = "[\\p{L}&&[^\u2000-\u206F\u2E00-\u2E7F\\s]]{1,30}";
+        String regex = "[\\p{L}-&&[^\u2000-\u206F\u2E00-\u2E7F\\s]]{1,30}";
 
         // Validar con la expresión regular
         Pattern pattern = Pattern.compile(regex);
@@ -225,7 +230,7 @@ public class VtnCrear1 extends JFrame implements ActionListener, FocusListener{
 	
 	private boolean validarFamilia(String familia) {
         // Expresión regular para permitir letras, 'ñ' y acentos, y limitar la longitud a 30 caracteres
-        String regex = "[\\p{L}&&[^\u2000-\u206F\u2E00-\u2E7F\\s]]{1,20}";
+        String regex = "[\\p{L}-&&[^\u2000-\u206F\u2E00-\u2E7F\\s]]{1,20}";
 
         // Validar con la expresión regular
         Pattern pattern = Pattern.compile(regex);

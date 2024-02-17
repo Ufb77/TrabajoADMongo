@@ -39,8 +39,27 @@ public class AccesoBdInstrumentos {
 	 */
 	public MongoCursor<Document> leerInstrumento(String campo, Object valor) {
 		MongoCursor<Document> cursor = coleccion.find(eq(campo, valor)).iterator();
+		System.out.println(valor);
 		return cursor;
 	}
+	
+	public Document leerUnoInstrumento(String campo, Object valor) {
+	    MongoCursor<Document> cursor = coleccion.find(eq(campo, valor)).limit(1).iterator();
+	    
+	    Document resultado = null;
+	    
+	    try {
+	        if (cursor.hasNext()) {
+	            resultado = cursor.next();
+	        }
+	    } finally {
+	        cursor.close();
+	    }
+
+	    return resultado;
+	}
+	
+	
 	
 	/**
 	 * Modifica un documento en relacion a la condicion campo - valor

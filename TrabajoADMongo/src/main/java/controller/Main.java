@@ -1,8 +1,6 @@
 package controller;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.bson.Document;
 
@@ -14,7 +12,6 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 
@@ -24,24 +21,17 @@ import view.VtnPrincipal;
 
 public class Main {
 
-	// Para mostrar
 	public static String nombre, familia, fabricante, accesorioInstrumental, material, tonalidad, formato, conexion;
 	public static Integer productionYear, numCuerdas, numTeclas, numTambores, numPedales;
 	public static Double precio, rating;
 
-//	static Vista_Instrumentos vi = new Vista_Instrumentos(); // Para usar la vista
-
-	// Buscar forma de hacer esto una sola vez sin static!
-	// Establece la conexion a la BD
 	static MongoClient mongoClient = MongoDB.getClient();
-	static MongoDatabase database = mongoClient.getDatabase("EjMongo"); // NOMBRE DE LA BD
-	static MongoCollection<Document> collection = database.getCollection("Instrumentos"); // NOMBRE DE LA COLECCION
-	static AccesoBdInstrumentos accessDB = new AccesoBdInstrumentos(collection); // Instancia del acceso a datos
+	static MongoDatabase database = mongoClient.getDatabase("EjMongo"); 
+	static MongoCollection<Document> collection = database.getCollection("Instrumentos"); 
 
-//	static int opcion = 0;
-
-	static Document documentoBD = new Document(); // Documento a escribir
-	static Document salidaBD = new Document(); // Documento para crear la salida{formato, conexion}
+	static AccesoBdInstrumentos accessDB = new AccesoBdInstrumentos(collection); 
+	static Document documentoBD = new Document(); 
+	static Document salidaBD = new Document(); 
 
 	/**
 	 * Imprime de forma legible el json
@@ -56,96 +46,150 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-
-//		menuPpal(bd);
-
 		new VtnPrincipal().setVisible(true);
-
 	}
 
+	/**
+	 * Método auxiliar que reocoge los datos para enviarlos a la vista y añadirlos a la colección
+	 * @param nombre
+	 */
 	public static void obtenerNombre(String nombre) {
 		Main.nombre = nombre;
 	}
 
+	/**
+	 * Método auxiliar que reocoge los datos para enviarlos a la vista y añadirlos a la colección
+	 * @param familia
+	 */
 	public static void obtenerFamilia(String familia) {
 
 		Main.familia = familia;
 	}
 
+	/**
+	 * Método auxiliar que reocoge los datos para enviarlos a la vista y añadirlos a la colección
+	 * @param fabricante
+	 */
 	public static void obtenerFabricante(String fabricante) {
 
 		Main.fabricante = fabricante;
 	}
 
+	/**
+	 * Método auxiliar que reocoge los datos para enviarlos a la vista y añadirlos a la colección
+	 * @param accesorio
+	 */
 	public static void obtenerAccesorioTocar(String accesorio) {
 
 		Main.accesorioInstrumental = accesorio;
 	}
 
+	/**
+	 * Método auxiliar que reocoge los datos para enviarlos a la vista y añadirlos a la colección
+	 * @param material
+	 */
 	public static void obtenerMaterial(String material) {
 
 		Main.material = material;
 	}
 
+	/**
+	 * Método auxiliar que reocoge los datos para enviarlos a la vista y añadirlos a la colección
+	 * @param tonalidad
+	 */
 	public static void obtenerTonalidad(String tonalidad) {
 
 		Main.tonalidad = tonalidad;
 	}
 
+	/**
+	 * Método auxiliar que reocoge los datos para enviarlos a la vista y añadirlos a la colección
+	 * @param agnoFabricancion
+	 */
 	public static void obtenerAgnoFabricacion(String agnoFabricancion) {
 
 		Main.productionYear = Integer.parseInt(agnoFabricancion);
 	}
 
+	/**
+	 * Método auxiliar que reocoge los datos para enviarlos a la vista y añadirlos a la colección
+	 * @param cuerdas
+	 */
 	public static void obtenerNumCuerdas(String cuerdas) {
 
 		Main.numCuerdas = Integer.parseInt(cuerdas);
 	}
 
+	/**
+	 * Método auxiliar que reocoge los datos para enviarlos a la vista y añadirlos a la colección
+	 * @param teclas
+	 */
 	public static void obtenerNumTeclas(String teclas) {
 
 		Main.numTeclas = Integer.parseInt(teclas);
 	}
 
+	/**
+	 * Método auxiliar que reocoge los datos para enviarlos a la vista y añadirlos a la colección
+	 * @param pedales
+	 */
 	public static void obtenerNumPedales(String pedales) {
 
 		Main.numPedales = Integer.parseInt(pedales);
 	}
 
+	/**
+	 * Método auxiliar que reocoge los datos para enviarlos a la vista y añadirlos a la colección
+	 * @param tambores
+	 */
 	public static void obtenerNumTambores(String tambores) {
 
 		Main.numTambores = Integer.parseInt(tambores);
 	}
 
+	/**
+	 * Método auxiliar que reocoge los datos para enviarlos a la vista y añadirlos a la colección
+	 * @param precio
+	 */
 	public static void obtenerPrecio(String precio) {
 
 		Main.precio = Double.parseDouble(precio);
 
 	}
 
+	/**
+	 * Método auxiliar que reocoge los datos para enviarlos a la vista y añadirlos a la colección
+	 * @param clasificacion
+	 */
 	public static void obtenerClasificacion(String clasificacion) {
 
 		Main.rating = Double.parseDouble(clasificacion);
 	}
 
+	/**
+	 * Método auxiliar que reocoge los datos para enviarlos a la vista y añadirlos a la colección
+	 * @param formato
+	 */
 	public static void obtenerFormato(String formato) {
 
 		Main.formato = formato;
 	}
 
+	/**
+	 * Método auxiliar que reocoge los datos para enviarlos a la vista y añadirlos a la colección
+	 * @param conexion
+	 */
 	public static void obtenerConexion(String conexion) {
 
 		Main.conexion = conexion;
 	}
 
 	/**
-	 * Crea la consulta que genera la vista y la mandao al dao
-	 * 
+	 * Crea la consulta que genera la vista y la manda al DAO
 	 * @param clave
 	 * @param valor
 	 * @return el texto a escribir en la ventana de resultados
 	 */
-	// 1 - ¿PASAR TODOS LOS DATOS A STRING?
 	
 	public static String obtenerConsulta(String clave, String valor) {
 	    StringBuilder texto = new StringBuilder();
@@ -188,9 +232,12 @@ public class Main {
 	    return texto.toString();
 	}
 
-
-
-
+	/**
+	 * Método que elimina un elemento de la colección al cumplir la condición campo - valor
+	 * @param campo
+	 * @param valor
+	 * @return el resultado de la acción
+	 */
 	public static String deleteInstrument(String campo, String valor) {
 	    String resultado;
 
@@ -219,7 +266,12 @@ public class Main {
 	    return resultado;
 	}
 
-
+	/**
+	 * Método que elimina todos los elementos de la colección al cumplir la condicion campo - valor 
+	 * @param campo
+	 * @param valor
+	 * @return el resultado de la acción
+	 */
 	public static String deleteManyInstruments(String campo, String valor) {
 	    String resultado;
 	    DeleteResult result;
@@ -247,52 +299,17 @@ public class Main {
 	    return resultado;
 	}
 	
-	// Método auxiliar para verificar si una cadena representa un número entero
-	private static boolean isInteger(String str) {
-	    try {
-	        Integer.parseInt(str);
-	        return true;
-	    } catch (NumberFormatException e) {
-	        return false;
-	    }
-	}
-
-	// Método auxiliar para verificar si una cadena representa un número de punto flotante (double)
-	private static boolean isDouble(String str) {
-	    try {
-	        Double.parseDouble(str);
-	        return true;
-	    } catch (NumberFormatException e) {
-	        return false;
-	    }
-	}
-
-//	public static void modificarDocumento(String clave, Object valorActual, Object valorNuevo) {
-//		Document docActualizar = accessDB.leerUnoInstrumento(clave, valorActual);
-//		//VAS A LA VTN BUSCAR AL METODO QUE ABRE ABRE LA VENTANA A PARTIR DEL IF DE MODIFICAR
-//		System.out.println("Entrando en el método...");
-//		System.out.println(valorNuevo);
-//		if(docActualizar != null) {  // Cambiado de == a !=
-//			System.out.println("Se comprueba que no está vacío");
-//			
-//			Document updateDocument = new Document("$set", new Document(clave, valorNuevo));  // Usar $set para actualizar
-//			
-//			System.out.println("Se crea el nuevo documento");
-//			
-//			//ESTA ACCION QUE PUSISTE ES COSA DEL DAO Y LO QUE HE HECHO HA SIDO PASARLA AL DAO NADA MAS :))
-//			
-//			
-//			System.out.println("Actualizado");
-//		} else {
-//			System.err.println("Error, documento no encontrado para actualización.");
-//		}
-//	}
-
+	/**
+	 * Metodo que modifica un elemento del documento recogido de la coleccion 
+	 * @param clave
+	 * @param valorActual
+	 * @param nuevoValor
+	 * @return el resultado de la acción
+	 */
 	public static String modifyOne(String clave, String valorActual, String nuevoValor) {
 	    String resultado;
 
 	    try {
-	        // Realizar conversiones según el tipo de clave y nuevoValor
 	        Object valorActualConvertido;
 	        Object nuevoValorConvertido;
 
@@ -312,7 +329,6 @@ public class Main {
 	            nuevoValorConvertido = nuevoValor;
 	        }
 
-	        // Llamar al método modificarInstrumento con los valores convertidos
 	        UpdateResult result = accessDB.modificarInstrumento(clave, valorActualConvertido, clave, nuevoValorConvertido);
 
 	        if (result.wasAcknowledged() && result.getModifiedCount() > 0) {
@@ -326,12 +342,40 @@ public class Main {
 
 	    return resultado;
 	}
+	
+	/**
+	 * Método auxiliar para verificar si una cadena representa un número entero
+	 * @param str
+	 * @return
+	 */
+	private static boolean isInteger(String str) {
+		try {
+			Integer.parseInt(str);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
+
+	/**
+	 * Método auxiliar para verificar si una cadena representa un número decima (double)
+	 * @param str
+	 * @return
+	 */
+	private static boolean isDouble(String str) {
+		try {
+			Double.parseDouble(str);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
 
 
 
 
 	/**
-	 * Manda al dao los datos a escribir y limpia todo tras hacerlo.
+	 * Método que manda al DAO los datos a escribir y limpia todo tras hacerlo.
 	 */
 	public static void addDocument() {
 
@@ -343,17 +387,14 @@ public class Main {
 	}
 
 	/**
-	 * Crea el documento a escribir en la base de datos
+	 * Método que crea el documento a escribir en la base de datos
 	 */
 	private static void toDocument() {
 		if (Main.nombre != null && !Main.nombre.isEmpty() && Main.familia != null && !Main.familia.isEmpty()
 				&& Main.fabricante != null && !Main.fabricante.isEmpty() && Main.precio != null) {
-			// Realizar la inserción en la base de datos solo si todas las variables no
-			// están vacías
 			documentoBD.append("Nombre", Main.nombre).append("Familia", Main.familia)
 					.append("Fabricante", Main.fabricante).append("Precio", Main.precio);
 		} else {
-			// Manejar el caso en el que alguna variable está vacía
 			System.out.println("No se pueden añadir datos con campos vacíos");
 			documentoBD.remove("_id");
 			return;
@@ -401,7 +442,7 @@ public class Main {
 	}
 
 	/**
-	 * Limpia las variables
+	 * Método que limpia las variables
 	 */
 	public static void limpiarCampos() {
 

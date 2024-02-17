@@ -22,7 +22,7 @@ public class AccesoBdInstrumentos {
 	}
 
 	/**
-	 * Inserta un instrumento
+	 * Método que inserta un elemento
 	 * @param documento
 	 */
 	public void addInstrumento(Document documento) {
@@ -32,7 +32,7 @@ public class AccesoBdInstrumentos {
 	
 	
 	/**
-	 * Transforma el campo y el valor en una consulta
+	 * Método que transforma el campo y el valor en una consulta
 	 * @param campo
 	 * @param valor
 	 * @return
@@ -43,6 +43,12 @@ public class AccesoBdInstrumentos {
 		return cursor;
 	}
 	
+	/**
+	 * Método que lee un elemento
+	 * @param campo
+	 * @param valor
+	 * @return
+	 */
 	public Document leerUnoInstrumento(String campo, Object valor) {
 	    MongoCursor<Document> cursor = coleccion.find(eq(campo, valor)).limit(1).iterator();
 	    
@@ -59,10 +65,8 @@ public class AccesoBdInstrumentos {
 	    return resultado;
 	}
 	
-	
-	
 	/**
-	 * Modifica un documento en relacion a la condicion campo - valor
+	 * Método que modifica un elemento en relacion a la condicion campo - valor
 	 * @param clave
 	 * @param valor
 	 * @param campoAModificar
@@ -76,7 +80,7 @@ public class AccesoBdInstrumentos {
     }
 	
 	/**
-	 * Elimina un documento que cumpla la condicion campo - valor 
+	 * Método que elimina un elemento que cumpla la condición campo - valor 
 	 * @param campo
 	 * @param valor
 	 * @return
@@ -88,7 +92,7 @@ public class AccesoBdInstrumentos {
 	}
 
 	/**
-	 * Elimina todos los documentos que cumplan la condicion campo - valor 
+	 * Método que elimina todos los elementos que cumplan la condición campo - valor 
 	 * @param campo
 	 * @param valor
 	 * @return

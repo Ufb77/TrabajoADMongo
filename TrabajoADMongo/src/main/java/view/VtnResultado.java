@@ -1,17 +1,15 @@
 package view;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import java.awt.Font;
 
-public class VtnResultado extends JFrame implements ActionListener, FocusListener {
+public class VtnResultado extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private JButton btnSiguiente, btnCancelar;
@@ -52,20 +50,7 @@ public class VtnResultado extends JFrame implements ActionListener, FocusListene
 	}
 
 	@Override
-	public void focusGained(FocusEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void focusLost(FocusEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		if (btnSiguiente == e.getSource()) {
 
 			if (operacion == VtnPrincipal.BUSCAR) {

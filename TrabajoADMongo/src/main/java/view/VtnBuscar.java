@@ -17,7 +17,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import controller.Main;
-import lombok.val;
 
 public class VtnBuscar extends JFrame implements ActionListener, FocusListener {
 
@@ -30,9 +29,6 @@ public class VtnBuscar extends JFrame implements ActionListener, FocusListener {
 	private JCheckBox chbxDeleteMany;
 	private JTextArea etiquetaChbox;
 
-	/**
-	 * Create the frame.
-	 */
 	public VtnBuscar(Integer operacion) {
 		setBounds(100, 100, 663, 408);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -101,7 +97,7 @@ public class VtnBuscar extends JFrame implements ActionListener, FocusListener {
 				new VtnResultado(operacion,texto).setVisible(true);
 				dispose();
 			} else if (operacion == VtnPrincipal.MODIFICAR) {
-				new VtnModificar(operacion, valor.getText()).setVisible(true);
+				new VtnModificar2(claves.getSelectedItem().toString(), valor.getText(), VtnPrincipal.MODIFICAR).setVisible(true);
 				dispose();
 			} else if (operacion == VtnPrincipal.ELIMINAR) {
 				if (chbxDeleteMany.isSelected()) {
@@ -119,6 +115,10 @@ public class VtnBuscar extends JFrame implements ActionListener, FocusListener {
 		}
 	}
 	
+	/**
+	 * Método que cambia el aspecto del frame dependiendo del código de operación recogido en el frame principal
+	 * @param operacion
+	 */
 	private void etiquetaCampoValor(Integer operacion) {
 		JTextArea etiquetaValor;
 		if (operacion == 1) {

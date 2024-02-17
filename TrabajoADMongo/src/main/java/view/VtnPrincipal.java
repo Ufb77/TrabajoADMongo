@@ -19,9 +19,6 @@ public class VtnPrincipal extends JFrame implements ActionListener, MouseListene
 	final static Integer MODIFICAR = 2;
 	final static Integer ELIMINAR = 3;
 
-	/**
-	 * Create the frame.
-	 */
 	public VtnPrincipal() {
 		setBounds(100, 100, 663, 408);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -56,8 +53,6 @@ public class VtnPrincipal extends JFrame implements ActionListener, MouseListene
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-
 		if (crear == e.getSource()) {
 			new VtnCrear1().setVisible(true);
 			dispose();
@@ -77,7 +72,6 @@ public class VtnPrincipal extends JFrame implements ActionListener, MouseListene
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		
 		if (crear == e.getSource()) {
 			crear.setBackground(Color.YELLOW);
 		}
@@ -112,19 +106,13 @@ public class VtnPrincipal extends JFrame implements ActionListener, MouseListene
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 }

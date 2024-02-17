@@ -26,9 +26,6 @@ public class VtnCrear1 extends JFrame implements ActionListener, FocusListener{
 	private JButton btnSiguiente, btnCancelar;
 	
 
-	/**
-	 * Create the frame.
-	 */
 	public VtnCrear1() {
 		setBounds(100, 100, 663, 408);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -85,6 +82,9 @@ public class VtnCrear1 extends JFrame implements ActionListener, FocusListener{
 
 	}
 	
+	/**
+	 * Metodo que activa o no los botones dependiendo de si lo campos cumplen las restrcciones necesarias
+	 */
 	private void actualizarVisibilidadBoton() {
         String nombre = textNombre.getText();
         String fabricante = textFabricante.getText();
@@ -131,6 +131,7 @@ public class VtnCrear1 extends JFrame implements ActionListener, FocusListener{
         btnSiguiente.setEnabled(camposNoVacios && precioValido);
     }
 	
+
 	private void addDocumentListenerToTextField(JTextField textField) {
         textField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -155,9 +156,9 @@ public class VtnCrear1 extends JFrame implements ActionListener, FocusListener{
 
 	@Override
 	public void focusGained(FocusEvent e) {
-	    JTextField fuente = (JTextField) e.getSource();//Recoge en un texfield comun lo que pille el texfield activo
+	    JTextField fuente = (JTextField) e.getSource();
 	    String texto = fuente.getText();
-	    int indice = -1;//Variable indice para que no se ralle a la hora de presionar en un txtfield
+	    int indice = -1;
 	    
 	    if(fuente == textNombre) indice = 0;
 	    else if(fuente == textFabricante) indice = 1;
@@ -202,59 +203,40 @@ public class VtnCrear1 extends JFrame implements ActionListener, FocusListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-	
-		
 		if(btnSiguiente == e.getSource()) {
-//			Main.addDocument();
-			
-			
 			new VtnCrear2().setVisible(true);
 			dispose();
 		}else if(btnCancelar == e.getSource()) {
 			new VtnPrincipal().setVisible(true);
 			dispose();
 		}
-		
 	}
+
+	/**
+	 * Método que según una expresión regular valida o no la cadena de String recogida
+	 * @param nombre
+	 * @return
+	 */
 	private boolean validarNombre(String nombre) {
-        // Expresión regular para permitir letras, 'ñ' y acentos, y limitar la longitud a 30 caracteres
         String regex = "[\\p{L}-&&[^\u2000-\u206F\u2E00-\u2E7F\\s]]{1,30}";
 
-        // Validar con la expresión regular
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(nombre);
 
         return matcher.matches();
     }
-	
+
+	/**
+	 * Método que según una expresión regular valida o no la cadena de String recogida
+	 * @param familia
+	 * @return
+	 */
 	private boolean validarFamilia(String familia) {
-        // Expresión regular para permitir letras, 'ñ' y acentos, y limitar la longitud a 30 caracteres
         String regex = "[\\p{L}-&&[^\u2000-\u206F\u2E00-\u2E7F\\s]]{1,20}";
 
-        // Validar con la expresión regular
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(familia);
 
         return matcher.matches();
     }
-	
-	
-//	IDEA PLACEHOLDER A LA HORA DE CREAR Y BUSCAR
-//	@Override
-//	public void focusGained(FocusEvent e) {
-//		// TODO Auto-generated method stub
-//		if (campoDeTexto.getText().equals(PLACEHOLDER)) {
-//			campoDeTexto.setText("");
-//			campoDeTexto.setForeground(Color.BLACK);
-//		}
-//	}
-//
-//	@Override
-//	public void focusLost(FocusEvent e) {
-//		if (campoDeTexto.getText().isEmpty()) {
-//			campoDeTexto.setForeground(Color.BLACK);
-//			campoDeTexto.setText(PLACEHOLDER);
-//		}
-//	}
 }

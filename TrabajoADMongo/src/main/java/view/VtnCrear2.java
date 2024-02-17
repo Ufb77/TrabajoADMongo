@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -11,14 +12,12 @@ import java.util.regex.Pattern;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
-
-import controller.Main;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import java.awt.Font;
+import controller.Main;
 
 public class VtnCrear2 extends JFrame implements ActionListener, FocusListener{
 
@@ -30,9 +29,6 @@ public class VtnCrear2 extends JFrame implements ActionListener, FocusListener{
 	private JButton btnAdd, btnAtras;
 	
 
-	/**
-	 * Create the frame.
-	 */
 	public VtnCrear2() {
 		setBounds(100, 100, 663, 408);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -144,6 +140,9 @@ public class VtnCrear2 extends JFrame implements ActionListener, FocusListener{
 		addDocumentListenerToTextField(txtClasificacion);
 	}
 	
+	/**
+	 * Método que activa o no el boton correspondiente dependiendo de que está o no relleno u es válido
+	 */
 	private void actualizarVisibilidadBoton() {
 	    String elementoParaTocar = txtElementoParaTocar.getText();
 	    Boolean tocarValido = validarString(elementoParaTocar);
@@ -256,7 +255,11 @@ public class VtnCrear2 extends JFrame implements ActionListener, FocusListener{
 	    btnAdd.setEnabled(camposValidos);
 	}
 
-	
+	/**
+	 * Método que valida una cadena String según una expresión regular
+	 * @param cadenaTexto
+	 * @return
+	 */
 	private boolean validarString(String cadenaTexto) {
 		String regex = "[\\p{L}-&&[^\u2000-\u206F\u2E00-\u2E7F\\s]]{0,30}";
 		
@@ -269,13 +272,18 @@ public class VtnCrear2 extends JFrame implements ActionListener, FocusListener{
 		}
 	}
 	
+	/**
+	 * Método que valida un Integer y actua segun la condición cumplida
+	 * @param numero
+	 * @return
+	 */
 	private boolean validarInteger(String numero) {
 		
 		if (numero != null && !numero.trim().isEmpty()) {
 	        for (String placeholder : PLACEHOLDER) {
 	            if (numero.trim().equalsIgnoreCase(placeholder)) {
 	            	numero = null;
-	                return true; // Si el número coincide con un placeholder, se considera nulo y válido
+	                return true;
 	            }
 	        }
 	        try {
@@ -285,17 +293,21 @@ public class VtnCrear2 extends JFrame implements ActionListener, FocusListener{
 	            return false;
 	        }
 	    } else {
-	        return true; // Devuelve true si el número es nulo o está vacío
+	        return true; 
 	    }
 	}
 	
-	
+	/**
+	 * Metodo que valida un double y actua dependiendo de si cumple condición o no
+	 * @param numero
+	 * @return
+	 */
 	private boolean validarDouble(String numero) {
 		if (numero != null && !numero.trim().isEmpty()) {
 	        for (String placeholder : PLACEHOLDER) {
 	            if (numero.trim().equalsIgnoreCase(placeholder)) {
 	            	numero = null;
-	                return true; // Si el número coincide con un placeholder, se considera nulo y válido
+	                return true;
 	            }
 	        }
 	        try {
@@ -305,7 +317,7 @@ public class VtnCrear2 extends JFrame implements ActionListener, FocusListener{
 	            return false;
 	        }
 	    } else {
-	        return true; // Devuelve true si el número es nulo o está vacío
+	        return true;
 	    }
 	}
 
@@ -333,9 +345,9 @@ public class VtnCrear2 extends JFrame implements ActionListener, FocusListener{
 
 	@Override
 	public void focusGained(FocusEvent e) {
-	    JTextField fuente = (JTextField) e.getSource();//Recoge en un texfield comun lo que pille el texfield activo
+	    JTextField fuente = (JTextField) e.getSource();
 	    String texto = fuente.getText();
-	    int indice = -1;//Variable indice para que no se ralle a la hora de presionar en un txtfield
+	    int indice = -1;
 	    
 	    if(fuente == textTonalidad) indice = 0;
 	    else if(fuente == textNumCuerdas) indice = 1;
@@ -413,13 +425,17 @@ public class VtnCrear2 extends JFrame implements ActionListener, FocusListener{
 			}
 		}
 	}
-	private boolean esNumeroValido(JTextField campo, boolean valido) {
+	/**
+	 * Metodo que cambia el color del background dependiendo de la condición
+	 * @param campo
+	 * @param valido
+	 * @return
+	 */
+	public boolean esNumeroValido(JTextField campo, boolean valido) {
 	    if (campo != null) {
 	        if (!valido) {
-	            // Establecer el color de fondo en rojo si el valor no es válido
 	            campo.setBackground(Color.RED);
 	        } else {
-	            // Restaurar el color de fondo predeterminado si el valor es válido
 	            campo.setBackground(UIManager.getColor("TextField.background"));
 	        }
 	    }
@@ -429,7 +445,6 @@ public class VtnCrear2 extends JFrame implements ActionListener, FocusListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		if(btnAdd == e.getSource()) {
 			Main.addDocument();
 			new VtnPrincipal().setVisible(true);

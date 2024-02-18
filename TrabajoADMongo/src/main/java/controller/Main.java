@@ -434,9 +434,9 @@ public class Main {
 
 		if (formato != null && conexion != null) {
 			documentoBD.append("Salida", new Document("Formato", Main.formato).append("Conexion", Main.conexion));
-		} else if (formato == null) {
+		} else if (formato == null && conexion!=null) {
 			documentoBD.append("Salida", new Document("Conexion", Main.conexion));
-		} else if (conexion == null) {
+		} else if (conexion == null && formato!=null) {
 			documentoBD.append("Salida", new Document("Formato", Main.formato));
 		}
 	}

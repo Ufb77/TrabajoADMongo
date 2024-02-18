@@ -395,7 +395,6 @@ public class Main {
 			documentoBD.append("Nombre", Main.nombre).append("Familia", Main.familia)
 					.append("Fabricante", Main.fabricante).append("Precio", Main.precio);
 		} else {
-			System.out.println("No se pueden añadir datos con campos vacíos");
 			documentoBD.remove("_id");
 			return;
 		}

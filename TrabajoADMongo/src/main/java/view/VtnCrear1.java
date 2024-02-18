@@ -94,14 +94,14 @@ public class VtnCrear1 extends JFrame implements ActionListener, FocusListener{
         boolean camposNoVacios = !nombre.isEmpty() && !fabricante.isEmpty() && !familia.isEmpty();
 
         boolean precioValido = false;
-        boolean familiaValida = validarFamilia(familia);
-        boolean fabricanteValido = validarNombre(fabricante);
-        boolean nombreValido = validarNombre(nombre);
+        boolean familiaValida = validarString(familia);
+        boolean fabricanteValido = validarString(fabricante);
+        boolean nombreValido = validarString(nombre);
         try {
             double precio = Double.parseDouble(precioStr);
             precioValido = precio > 0;
         } catch (NumberFormatException ignored) {
-            // No es un Double válido
+            
         }
         
         if (precioValido) {
@@ -217,26 +217,31 @@ public class VtnCrear1 extends JFrame implements ActionListener, FocusListener{
 	 * @param nombre
 	 * @return
 	 */
-	private boolean validarNombre(String nombre) {
-        String regex = "[\\p{L}-&&[^\u2000-\u206F\u2E00-\u2E7F\\s]]{1,30}";
-
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(nombre);
-
-        return matcher.matches();
-    }
+	
+	
+	private boolean validarString(String cadenaTexto) {
+		String regex = "[\\p{L} -&&[^\u2000-\u206F\u2E00-\u2E7F\\s()\\[\\]{}]]{0,30}";
+		
+		for(String placeholder : PLACEHOLDER) {
+			if(cadenaTexto.trim().equalsIgnoreCase(placeholder)) {
+				cadenaTexto = null;
+				return false;
+			}
+		}
+		
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(cadenaTexto);
+		if (cadenaTexto == null) {
+			return true;
+		} else {
+		return matcher.matches();
+		}
+	}
 
 	/**
 	 * Método que según una expresión regular valida o no la cadena de String recogida
 	 * @param familia
 	 * @return
 	 */
-	private boolean validarFamilia(String familia) {
-        String regex = "[\\p{L}-&&[^\u2000-\u206F\u2E00-\u2E7F\\s]]{1,20}";
-
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(familia);
-
-        return matcher.matches();
-    }
+	
 }

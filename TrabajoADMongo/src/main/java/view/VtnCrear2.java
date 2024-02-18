@@ -261,7 +261,9 @@ public class VtnCrear2 extends JFrame implements ActionListener, FocusListener{
 	 * @return
 	 */
 	private boolean validarString(String cadenaTexto) {
-		String regex = "[\\p{L}-&&[^\u2000-\u206F\u2E00-\u2E7F\\s]]{0,30}";
+		String regex = "[\\p{L} -&&[^\u2000-\u206F\u2E00-\u2E7F\\s]]{0,30}";
+		
+		
 		
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(cadenaTexto);
@@ -393,34 +395,34 @@ public class VtnCrear2 extends JFrame implements ActionListener, FocusListener{
 		if (texto.isEmpty()) {
 		} else {
 			if (textTonalidad == e.getSource()) {
-				System.out.println(textTonalidad.getText());
+				
 				Main.obtenerTonalidad(textTonalidad.getText());
 			} else if (textNumCuerdas == e.getSource()) {
-				System.out.println(textNumCuerdas.getText());
+				
 				Main.obtenerNumCuerdas(textNumCuerdas.getText());
 			} else if (textNumTambores == e.getSource()) {
-				System.out.println(textNumTambores.getText());
+				
 				Main.obtenerNumTambores(textNumTambores.getText());
 			} else if (textNumTeclas == e.getSource()) {
-				System.out.println(textNumTeclas.getText());
+				
 				Main.obtenerNumTeclas(textNumTeclas.getText());
 			} else if (textNumPedales == e.getSource()) {
-				System.out.println(textNumPedales.getText());
+				
 				Main.obtenerNumPedales(textNumPedales.getText());
 			} else if (txtMaterial == e.getSource()) {
-				System.out.println(txtMaterial.getText());
+				
 				Main.obtenerMaterial(txtMaterial.getText());
 			} else if (txtClasificacion == e.getSource()) {
-				System.out.println(txtClasificacion.getText());
+				
 				Main.obtenerClasificacion(txtClasificacion.getText());
 			} else if (txtElementoParaTocar == e.getSource()) {
-				System.out.println(txtElementoParaTocar.getText());
+				
 				Main.obtenerAccesorioTocar(txtElementoParaTocar.getText());
 			} else if (txtFormato == e.getSource()) {
-				System.out.println(txtFormato.getText());
+				
 				Main.obtenerFormato(txtFormato.getText());
 			} else if (txtConexion == e.getSource()) {
-				System.out.println(txtConexion.getText());
+				
 				Main.obtenerConexion(txtConexion.getText());
 			}
 		}

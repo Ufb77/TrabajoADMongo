@@ -39,7 +39,7 @@ public class AccesoBdInstrumentos {
 	 */
 	public MongoCursor<Document> leerInstrumento(String campo, Object valor) {
 		MongoCursor<Document> cursor = coleccion.find(eq(campo, valor)).iterator();
-		System.out.println(valor);
+		
 		return cursor;
 	}
 	
